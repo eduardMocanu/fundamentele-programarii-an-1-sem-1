@@ -15,7 +15,7 @@ Documentatia să contină:
 #Functionality
 #nicely print a list
 
-def print_list(list:[int]):
+def print_list(list:list[int]):
     for i in list:
         print(i, end=" ")
 
@@ -36,7 +36,7 @@ def read_list():
     return lista_citita
 
 #menu option 2
-def cel_mult_trei_valori_distincte_subsecventa(lista:[int], index: int):
+def cel_mult_trei_valori_distincte_subsecventa(lista:list[int], index: int):
     numbers = set()
     sequence = []
     for i in range(index, len(lista)):
@@ -47,7 +47,7 @@ def cel_mult_trei_valori_distincte_subsecventa(lista:[int], index: int):
             break
     return sequence
 
-def cel_mult_trei_valori_distincte_toata_lista(lista:[int]):
+def cel_mult_trei_valori_distincte_toata_lista(lista:list[int]):
     list_to_return = []
     for i in range(0, len(lista)):
         temp = cel_mult_trei_valori_distincte_subsecventa(lista, i)
@@ -56,7 +56,7 @@ def cel_mult_trei_valori_distincte_toata_lista(lista:[int]):
     return list_to_return
 
 #menu option 3
-def toate_distincte_subsecventa(lista:[int], index:int):
+def toate_distincte_subsecventa(lista:list[int], index:int):
     list_to_return = []
     numbers = set()
     for i in range(index, len(lista)):
@@ -67,7 +67,7 @@ def toate_distincte_subsecventa(lista:[int], index:int):
             break
     return list_to_return
 
-def toate_distincte_toata_lista(lista:[int]):
+def toate_distincte_toata_lista(lista:list[int]):
     result = []
     for i in range(len(lista)):
         temp = toate_distincte_subsecventa(lista, i)
@@ -96,15 +96,23 @@ def menu_print():
 def main():
     x = -1
     list_main = []
+    ok_lista = False
     while(x != 4):
         menu_print()
         x = menu_interact()
         if(x == 1):
             list_main = read_list()[:]
+            ok_lista = True
         elif(x==2):
-            print_list(cel_mult_trei_valori_distincte_toata_lista(list_main))
+            if(ok_lista):
+                print_list(cel_mult_trei_valori_distincte_toata_lista(list_main))
+            else:
+                print("Mai intai trebuie sa citesti o lista")
         elif(x==3):
-            print_list(toate_distincte_toata_lista(list_main))
+            if(ok_lista):
+                print_list(toate_distincte_toata_lista(list_main))
+            else:
+                print("Mai intai trebuie sa citesti o lista")
     print("bye bye")
 
 main()
