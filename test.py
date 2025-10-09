@@ -29,3 +29,5 @@ print(y)
 
 """
 
+s = "test test test"
+print(s.split(" "))

@@ -116,7 +116,10 @@ def main():
     print("bye bye")
 
 main()
-
+#o scurta descriere pt fiecare functie cu ce face
+#tipul parametrilor pe care ii accepta
+#ce returneaza + tipul de return
+#ce eroare raises si cand
 
 
 
