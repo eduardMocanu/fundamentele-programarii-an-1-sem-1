@@ -20,7 +20,7 @@ def print_list(list:list[int]):
         print(i, end=" ")
 
 #menu option 1
-def read_list():
+def read_list()->list[int]:
     n = int(input("Cate elemente are lista?"))
     lista_citita = []
     for i in range(n):
@@ -36,7 +36,7 @@ def read_list():
     return lista_citita
 
 #menu option 2
-def cel_mult_trei_valori_distincte_subsecventa(lista:list[int], index: int):
+def cel_mult_trei_valori_distincte_subsecventa(lista:list[int], index: int)->list[int]:
     numbers = set()
     sequence = []
     for i in range(index, len(lista)):
@@ -47,7 +47,7 @@ def cel_mult_trei_valori_distincte_subsecventa(lista:list[int], index: int):
             break
     return sequence
 
-def cel_mult_trei_valori_distincte_toata_lista(lista:list[int]):
+def cel_mult_trei_valori_distincte_toata_lista(lista:list[int])->list[int]:
     list_to_return = []
     for i in range(0, len(lista)):
         temp = cel_mult_trei_valori_distincte_subsecventa(lista, i)
@@ -56,7 +56,7 @@ def cel_mult_trei_valori_distincte_toata_lista(lista:list[int]):
     return list_to_return
 
 #menu option 3
-def toate_distincte_subsecventa(lista:list[int], index:int):
+def toate_distincte_subsecventa(lista:list[int], index:int)->list[int]:
     list_to_return = []
     numbers = set()
     for i in range(index, len(lista)):
@@ -67,7 +67,7 @@ def toate_distincte_subsecventa(lista:list[int], index:int):
             break
     return list_to_return
 
-def toate_distincte_toata_lista(lista:list[int]):
+def toate_distincte_toata_lista(lista:list[int])->list[int]:
     result = []
     for i in range(len(lista)):
         temp = toate_distincte_subsecventa(lista, i)
