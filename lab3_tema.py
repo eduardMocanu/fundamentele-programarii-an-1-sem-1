@@ -13,16 +13,34 @@ Documentatia să contină:
 
 """
 #Functionality
-#nicely print a list
 
+#nicely print a list
 def print_list(list:list[int]):
+    """
+    afiseaza lista pe aceeasi linie cu spatiu intre elemente
+    :param list: lista ce dorim sa fie afisata; preconditie: lista de tipul [1, 2, 3]
+    :return: no return
+    """
     for i in list:
         print(i, end=" ")
+    print()
 
 #menu option 1
 def read_list()->list[int]:
-    n = int(input("Cate elemente are lista?"))
+    """
+    Citeste o lista cu n elemente, unde si n este citit
+    :return: lista citita
+    """
     lista_citita = []
+    n = -1
+    while True:
+        try:
+            n = int(input("Cate elemente are lista?\n"))
+            if n <= 0:
+                raise ValueError
+            break
+        except ValueError:
+            print("Introdu un numar mai mare ca 0")
     for i in range(n):
         print(f"Introdu numarul cu pozitia {i}:")
         ok = False
@@ -37,6 +55,12 @@ def read_list()->list[int]:
 
 #menu option 2
 def cel_mult_trei_valori_distincte_subsecventa(lista:list[int], index: int)->list[int]:
+    """
+    Gaseste subsecventa (continua) maxima cu cel mult 3 valori distincte incepand cu un index a carei valoare este inclusa
+    :param lista: lista unde dorim sa gasim subsecventa; preconditie : lista de tipul [1, 2, 3]
+    :param index: indexul de unde se doreste ca subsecventa sa inceapa
+    :return: subsecventa gasita
+    """
     numbers = set()
     sequence = []
     for i in range(index, len(lista)):
@@ -48,6 +72,11 @@ def cel_mult_trei_valori_distincte_subsecventa(lista:list[int], index: int)->lis
     return sequence
 
 def cel_mult_trei_valori_distincte_toata_lista(lista:list[int])->list[int]:
+    """
+    Gaseste subsecventa (continua) maxima de cel mult 3 valori distincte dintr-o lista
+    :param lista: lista unde dorim sa cautam subsecventa; preconditie: lista de tipul [1, 2, 3]
+    :return: subsecventa gasita
+    """
     list_to_return = []
     for i in range(0, len(lista)):
         temp = cel_mult_trei_valori_distincte_subsecventa(lista, i)
@@ -57,6 +86,12 @@ def cel_mult_trei_valori_distincte_toata_lista(lista:list[int])->list[int]:
 
 #menu option 3
 def toate_distincte_subsecventa(lista:list[int], index:int)->list[int]:
+    """
+    Gaseste subsecventa (continua) maxima unde toate elementele dintr-o lista sunt distincte intre ele, incepand cu un index care este inclus in subsecventa cautata
+    :param lista: lista unde dorim sa cautam subsecventa
+    :param index: indexul de unde se doreste a se incepe cautarea
+    :return: subsecventa maxima gasita
+    """
     list_to_return = []
     numbers = set()
     for i in range(index, len(lista)):
@@ -68,6 +103,11 @@ def toate_distincte_subsecventa(lista:list[int], index:int)->list[int]:
     return list_to_return
 
 def toate_distincte_toata_lista(lista:list[int])->list[int]:
+    """
+    Gaseste subsecventa (continua) maxima din lista unde toate elementele sunt distincte intre ele
+    :param lista: lista unde dorim sa cautam aceasta subsecventa
+    :return: subsecventa gasita
+    """
     result = []
     for i in range(len(lista)):
         temp = toate_distincte_subsecventa(lista, i)
@@ -75,16 +115,40 @@ def toate_distincte_toata_lista(lista:list[int])->list[int]:
             result = temp[:]
     return result
 
+#middleware
+def middleware_functions_list(ok_list:bool)->bool:
+    """
+    Verifica pentru fiecare apel care depinde de lista daca aceasta a fost sau nu citita
+    :param ok_list: valoare care atesta sau nu ca o lista a fost citita
+    :return: valoare care permite sau nu efectuarea operatiilor pe baza listei
+    """
+    if not ok_list:
+        print("Mai intai citeste o lista")
+        return False
+    return True
+
 
 #-------------------
 #menu interact
 def menu_interact() -> int:
-    x = int(input("Introdu optiunea pe care doresti sa o urmezi: \n"))
-    while x > 4 or x <= 0:
-        x = int(input("Introdu o optiune valida: \n"))
-    return x
+    """
+    Interactionarea cu meniul - citire de valori pentru a interaction cu meniul
+    :return: valoarea citita
+    """
+    while True:
+        try:
+            x = int(input("Introdu optiunea pe care doresti sa o urmezi: \n"))
+            if(x <= 0 or x > 4):
+                raise ValueError
+            return x
+        except ValueError:
+            print("Introdu o valoare valida")
 
 def menu_print():
+    """
+    Afiseaza meniul pe care il avem disponibil pentru a utiliza functionalitatile aplicatiei
+    :return:
+    """
     print("Alege una dintre urmatoarele optiuni prin introducerea ID-ului asociat fiecareia")
     print("1 - Citirea unei liste de numere intregi")
     print("2 - Gasirea secventelor de lungime maxima care contine cel mult trei valori distincte")
@@ -94,32 +158,28 @@ def menu_print():
 
 
 def main():
-    x = -1
+    """
+    Functia principala care trebuie apelata pentru a rula programul
+    :return:
+    """
+    menu_option = -1
     list_main = []
     ok_lista = False
-    while(x != 4):
+    while(menu_option != 4):
         menu_print()
-        x = menu_interact()
-        if(x == 1):
+        menu_option = menu_interact()
+        if(menu_option == 1):
             list_main = read_list()[:]
             ok_lista = True
-        elif(x==2):
-            if(ok_lista):
+        elif(menu_option==2):
+            if middleware_functions_list(ok_lista):
                 print_list(cel_mult_trei_valori_distincte_toata_lista(list_main))
-            else:
-                print("Mai intai trebuie sa citesti o lista")
-        elif(x==3):
-            if(ok_lista):
+        elif(menu_option==3):
+            if middleware_functions_list(ok_lista):
                 print_list(toate_distincte_toata_lista(list_main))
-            else:
-                print("Mai intai trebuie sa citesti o lista")
     print("bye bye")
 
 main()
-#o scurta descriere pt fiecare functie cu ce face
-#tipul parametrilor pe care ii accepta
-#ce returneaza + tipul de return
-#ce eroare raises si cand
 
 
 
