@@ -2,7 +2,7 @@
 Scrieti o aplicatie care are interfata utilizator tip consolă cu un meniu:
 1 Citirea unei liste de numere intregi
 2,3 Gasirea secventelor de lungime maxima care respectă o proprietatea dată:
-    - Contine cel mult trei valori distincte
+    - Contine s
     - sunt toate distincte intre ele
 4 Iesire din aplicatie.
 Documentatia să contină:
