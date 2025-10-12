@@ -15,13 +15,13 @@ Documentatia să contină:
 #Functionality
 
 #nicely print a list
-def print_list(list:list[int]):
+def print_list(lista:list[int]):
     """
     afiseaza lista pe aceeasi linie cu spatiu intre elemente
     :param list: lista ce dorim sa fie afisata; preconditie: lista de tipul [1, 2, 3]
     :return: no return
     """
-    for i in list:
+    for i in lista:
         print(i, end=" ")
     print()
 
@@ -170,12 +170,16 @@ def main():
         menu_option = menu_interact()
         if(menu_option == 1):
             list_main = read_list()[:]
+            print("Lista citita este: ")
+            print_list(list_main)
             ok_lista = True
         elif(menu_option==2):
             if middleware_functions_list(ok_lista):
+                print("Secventa de lungime maxima care contine cel mult 3 valori distincte este: ")
                 print_list(cel_mult_trei_valori_distincte_toata_lista(list_main))
         elif(menu_option==3):
             if middleware_functions_list(ok_lista):
+                print("Secventa de lungime maxima in care toate elementele sunt distincte intre ele este: ")
                 print_list(toate_distincte_toata_lista(list_main))
     print("bye bye")
 
