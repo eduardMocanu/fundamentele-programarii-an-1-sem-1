@@ -30,6 +30,16 @@ complex.
 de poziții (sub secvența).
  • Tipărește toate numerele complexe care au modulul mai mic decât 10
  • Tipărește toate numerele complexe care au modulul egal cu 10
+ 4. Operații pe un subset de participanți.
+• Calculează media scorurilor pentru un interval dat (ex. Se da 1 și 5 se
+tipărește media scorurilor participanților 1,2,3,4 și 5
+• Calculează scorul minim pentru un interval de participanți dat.
+• Tipărește participanții dintr-un interval dat care au scorul multiplu de 10.
+5. Filtrare.
+• Filtrare participanți care au scorul multiplu unui număr dat. Ex. Se da
+numărul 10, se elimină scorul de la toți participanții care nu au scorul
+multiplu de 10.
+• Filtrare participanți care au scorul mai mic decât un scor dat.
 lab 5 -
 lab 6 -
 """
@@ -112,15 +122,27 @@ def read_indexes_to_remove_subsequence(lista:list[list[int]])->list[int]:
             print("Introdu o valoare valida.")
     return [index_start, index_end]
 
-def remove_elements_subsequence(lista:list[list[int]], indexes:list[int])->list[list[int]]:
-    lista = lista[:indexes[0]] + lista[indexes[1]+1:]
+def remove_elements_subsequence(lista:list[list[int]], index_start:int, index_end:int)->list[list[int]]:
+    lista = lista[:index_start] + lista[index_end + 1:]
     return lista
 
+def test_remove_elements_subsequence():
+    assert remove_elements_subsequence([[1, 2], [2, 3]], 0, 1) == []
+    assert remove_elements_subsequence([[1, 2], [2, 3], [4, 5]], 0, 1) == [[4, 5]]
+    assert remove_elements_subsequence([], 10, 11) == []
+
+
 def replace_complex_value_with_another_one(lista:list[list[int]], to_be_replaced:list[int], to_replace:list[int]):
-    for i in lista:
-        if i == to_be_replaced:
+    for i in range(len(lista)):
+        if lista[i] == to_be_replaced:
             lista[i] = to_replace
     return lista
+
+def test_replace_complex_value_with_another_one():
+    assert replace_complex_value_with_another_one([[1, 2], [3, 4]], [1, 2], [10, 11]) == [[10, 11], [3, 4]]
+    assert replace_complex_value_with_another_one([[1, 2], [3, 4], [5, 6], [5, 6], [5, 6]], [5, 6], [1, 4]) == [[1, 2], [3, 4], [1, 4], [1, 4], [1, 4]]
+    assert replace_complex_value_with_another_one([], [5, 6], [1, 4]) == []
+
 
 def print_menu_modify_elements():
     pass
@@ -158,9 +180,15 @@ def print_imaginary_side(lista:list[list[int]], indexes_print:list[int]):
 def get_all_imaginary_numbers_where_abs_value_less_than_10(lista:list[list[int]])->list[list[int]]:
     return_value = []
     for i in lista:
-        if(math.sqrt(i[0] ** 2 + i[1] ** 2) < 10):
+        if math.sqrt(i[0] ** 2 + i[1] ** 2) < 10:
             return_value.append(i)
     return return_value
+
+def test_get_all_imaginary_numbers_where_abs_value_less_than_10():
+    assert get_all_imaginary_numbers_where_abs_value_less_than_10([[1, 2], [6, 7]]) == [[1, 2], [6, 7]]
+    assert get_all_imaginary_numbers_where_abs_value_less_than_10([[1, 2], [100, 101]]) == [[1, 2]]
+    assert get_all_imaginary_numbers_where_abs_value_less_than_10([]) == []
+
 
 def get_all_imaginary_numbers_where_abs_value_equals_10(lista:list[list[int]])->list[list[int]]:
     return_value = []
@@ -168,6 +196,11 @@ def get_all_imaginary_numbers_where_abs_value_equals_10(lista:list[list[int]])->
         if math.sqrt(i[0] ** 2 + i[1] ** 2) == 10:
             return_value.append(i)
     return return_value
+
+def test_get_all_imaginary_numbers_where_abs_value_equals_10():
+    assert get_all_imaginary_numbers_where_abs_value_equals_10([[1, 2], [6, 8]]) == [[6, 8]]
+    assert get_all_imaginary_numbers_where_abs_value_equals_10([[1, 2], [100, 101]]) == []
+    assert get_all_imaginary_numbers_where_abs_value_equals_10([]) == []
 
 def print_all_imaginary_numbers_where_abs_value_equals_10(lista:list[list[int]]):
     print_list_imaginary_number(get_all_imaginary_numbers_where_abs_value_equals_10(lista))
@@ -178,17 +211,32 @@ def print_all_imaginary_numbers_where_abs_value_less_than_10(lista:list[list[int
 #operations with numbers in the list - option 4
 def subsequence_sum(lista:list[list[int]], start:int, end:int)->list[int]:
     sum = [0, 0]
-    for i in range(start, end + 1):
+    end = min(end+1, len(lista))
+    for i in range(start, end):
         sum[0] += lista[i][0]
         sum[1] += lista[i][1]
     return sum
 
-def subsequence_product(lista:list[list[int]], start:int, end:int)->list[int]:
-    product = [1, 1]
-    for i in range(start, end+1):
-        product[0] = (product[0] * lista[i][0] - product[1] * lista[i][1])
-        product[1] = (product[0] * lista[i][1] + product[1] * lista[i][0])
+def test_subsequence_sum():
+    assert subsequence_sum([[1, 2], [3, 4], [5, 6]], 0, 2) == [9, 12]
+    assert subsequence_sum([[4, 5], [6, 7]], 0, 0) == [4, 5]
+    assert subsequence_sum([], 0, 100) == [0, 0]
+
+
+def subsequence_product(lista: list[list[int]], start: int, end: int) -> list[int]:
+    product = [1, 0]
+    end = min(end + 1, len(lista))
+    for i in range(start, end):
+        a, b = product
+        c, d = lista[i]
+        product[0] = a * c - b * d
+        product[1] = a * d + b * c
     return product
+
+def test_subsequence_product():
+    assert subsequence_product([[2, 3]], 0, 0) == [2, 3]
+    assert subsequence_product([[2, 3], [1, 1]], 0, 1) == [-1, 5]
+    assert subsequence_product([[1, 1], [2, 0], [0, 1]], 0, 2) == [-2, 2]
 
 def get_sorted_list_by_imaginary_part(lista:list[list[int]])->list[list[int]]:
     def sorting_criteria(item:list[int]):
@@ -215,7 +263,6 @@ def remove_elements_where_abs_value_doesnt_satisfy_request(lista:list[list[int]]
     return_list = []
     for i in lista:
         absolute_value = math.sqrt(i[0] ** 2 + i[1] ** 2)
-
         if option == 1 and absolute_value >= number:
             return_list.append(i)
         elif option == 2 and (absolute_value < number or absolute_value > number):
@@ -259,10 +306,10 @@ def main():
     print("bye bye")
 
 """
-add testing for (3 - 5)
+add testing for (4+ 5)
 add documentation (3 - 5)
 add the tasks things (3 - 5)
 implement the menu options for 3 - 5 options
 check on how I can structure the menu and implement the first 2 functionalities as well (optional)
-make the functionality 6
+make the functionality 6 (optional)
 """
