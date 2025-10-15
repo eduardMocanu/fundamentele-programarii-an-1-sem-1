@@ -27,7 +27,11 @@ while(r != 0):
     r = x % y
 print(y)
 
-"""
 
 s = "test test test"
 print(s.split(" "))
+"""
+
+import test.test1
+
+test.test1.print_something()
