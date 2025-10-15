@@ -157,6 +157,7 @@ def middleware_functions_list(ok_list:bool)->bool:
 #menu interact
 def menu_interact() -> int:
     """
+
     Interactionarea cu meniul - citire de valori pentru a interaction cu meniul
     :return: valoarea citita
     """
