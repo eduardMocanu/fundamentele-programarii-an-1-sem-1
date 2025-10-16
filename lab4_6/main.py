@@ -45,7 +45,6 @@ lab 6 -
 """
 import math
 
-
 #nicely print a list
 def print_list(lista:list[list[int]]):
     """
@@ -151,6 +150,11 @@ def print_menu_modify_elements():
 #---------------------LAB 4
 #search numbers - option 3
 def read_indexes_to_print_imaginary_subsequence(lista:list[list[int]])->list[int]:
+    """
+    Citeste pozitiile pentru care se doreste inceputul, respectiv sfarsitul afisarii unei subsecvente din lista
+    :param lista: lista pentru care dorim sa afisam subsecventa; de tipul: [[1, 2], [3, 4]]
+    :return: o lista ce contine indexul de start pe pozitia 0 si indexul de sfarsit pe pozitia 1
+    """
     index_start = 0
     index_end = 0
     while True:
@@ -173,11 +177,22 @@ def read_indexes_to_print_imaginary_subsequence(lista:list[list[int]])->list[int
 
 
 def print_imaginary_side(lista:list[list[int]], indexes_print:list[int]):
+    """
+    Afiseaza partea imaginara a numerelor cuprinse intre 2 pozitii
+    :param lista: lista din care dorim sa afisam elementele; de tipul: [[1, 2], [3, 4]]
+    :param indexes_print: o lista de 2 elemente care contine pe pozitia 0 indexul de start iar pe pozitia 1 ultimul index; de tipul: [1, 2]
+    :return: no return
+    """
     for i in range(indexes_print[0], indexes_print[1] + 1):
         print(lista[i][1], end = " ")
     print()
 
 def get_all_imaginary_numbers_where_abs_value_less_than_10(lista:list[list[int]])->list[list[int]]:
+    """
+    Gaseste o sublista care contine toate elementele dintr-o lista de numere complexe care au valoarea absoluta mai mica decat 10
+    :param lista: lista de unde dorim a extrage valorile cu modulul mai mic decat 10; de tipul: [[1, 2], [3, 4]]
+    :return: sublista care contine elementele care satisfac cerinta
+    """
     return_value = []
     for i in lista:
         if math.sqrt(i[0] ** 2 + i[1] ** 2) < 10:
@@ -185,12 +200,21 @@ def get_all_imaginary_numbers_where_abs_value_less_than_10(lista:list[list[int]]
     return return_value
 
 def test_get_all_imaginary_numbers_where_abs_value_less_than_10():
+    """
+    Testeaza functionalitatea corecta a functiei get_all_imaginary_numbers_where_abs_value_less_than_10
+    :return: no return
+    """
     assert get_all_imaginary_numbers_where_abs_value_less_than_10([[1, 2], [6, 7]]) == [[1, 2], [6, 7]]
     assert get_all_imaginary_numbers_where_abs_value_less_than_10([[1, 2], [100, 101]]) == [[1, 2]]
     assert get_all_imaginary_numbers_where_abs_value_less_than_10([]) == []
 
 
 def get_all_imaginary_numbers_where_abs_value_equals_10(lista:list[list[int]])->list[list[int]]:
+    """
+    Gaseste o sublista dintr-o lista de numere complexe oferita, unde toate elementele au valoarea absoluta egala cu 10; de tipul: [[1, 2], [3, 4]]
+    :param lista: lista unde dorim sa gasim sublista care are toate elementele cu proprietatea ca valoarea lor absoluta este 10; de tipul: [[1, 2], [3, 4]]
+    :return: sublista construita cu proprietatea precizata
+    """
     return_value = []
     for i in lista:
         if math.sqrt(i[0] ** 2 + i[1] ** 2) == 10:
@@ -198,18 +222,39 @@ def get_all_imaginary_numbers_where_abs_value_equals_10(lista:list[list[int]])->
     return return_value
 
 def test_get_all_imaginary_numbers_where_abs_value_equals_10():
+    """
+    Testeaza functionalitatea corecta a functiei get_all_imaginary_numbers_where_abs_value_equals_10
+    :return: no return
+    """
     assert get_all_imaginary_numbers_where_abs_value_equals_10([[1, 2], [6, 8]]) == [[6, 8]]
     assert get_all_imaginary_numbers_where_abs_value_equals_10([[1, 2], [100, 101]]) == []
     assert get_all_imaginary_numbers_where_abs_value_equals_10([]) == []
 
 def print_all_imaginary_numbers_where_abs_value_equals_10(lista:list[list[int]]):
+    """
+    Afiseaza sublista dintr-o lista de numere complexe unde toate elementele au valoarea absoluta egala cu 10
+    :param lista: lista unde dorim sa gasim o sublista care sa satisfaca conditia ca toate elementele sa aiba valoarea absoluta egala cu 10 si sa afiseze sublista construita; de tipul: [[1, 2], [3, 4]]
+    :return: no return
+    """
     print_list_imaginary_number(get_all_imaginary_numbers_where_abs_value_equals_10(lista))
 
 def print_all_imaginary_numbers_where_abs_value_less_than_10(lista:list[list[int]]):
+    """
+    Afiseaza sublista dintr-o lista de numere complexe unde toate elementele au valoarea absoluta mai mica decat 10
+    :param lista: lista unde dorim sa gasim o sublista care sa satisfaca conditia ca toate elementele sa aiba valoarea absoluta mai mica decat 10 si sa afiseze sublista construita; de tipul: [[1, 2], [3, 4]]
+    :return: no return
+    """
     print_list_imaginary_number(get_all_imaginary_numbers_where_abs_value_less_than_10(lista))
 
 #operations with numbers in the list - option 4
 def subsequence_sum(lista:list[list[int]], start:int, end:int)->list[int]:
+    """
+    Calculeaza suma unei subsecvente de numere complexe dintr-o lista
+    :param lista: lista unde dorim sa calculam suma; de tipul: [[1, 2], [3, 4]]
+    :param start: indexul de unde dorim sa incepem sa calculam suma
+    :param end: indexul unde dorim sa incetam sa calculam suma
+    :return: lista de 2 elemente care contine suma elementelor reale pe indexul 0, iar pe indexul 1 suma numerelor imaginare
+    """
     sum = [0, 0]
     end = min(end+1, len(lista))
     for i in range(start, end):
@@ -218,12 +263,23 @@ def subsequence_sum(lista:list[list[int]], start:int, end:int)->list[int]:
     return sum
 
 def test_subsequence_sum():
+    """
+    Testeaza functionalitatea corecta a functiei subsequence_sum
+    :return: no return
+    """
     assert subsequence_sum([[1, 2], [3, 4], [5, 6]], 0, 2) == [9, 12]
     assert subsequence_sum([[4, 5], [6, 7]], 0, 0) == [4, 5]
     assert subsequence_sum([], 0, 100) == [0, 0]
 
 
 def subsequence_product(lista: list[list[int]], start: int, end: int) -> list[int]:
+    """
+    Calculeaza produsul unei subsecvente de numere complexe dintr-o lista
+    :param lista: lista unde dorim sa calculam produsul; de tipul: [[1, 2], [3, 4]]
+    :param start: indexul de unde dorim sa incepem sa calculam produsul
+    :param end: indexul unde dorim sa incetam sa calculam produsul
+    :return: lista de 2 elemente care contine partea reala a produsului pe indexul 0, iar pe indexul 1 partea imaginara
+    """
     product = [1, 0]
     end = min(end + 1, len(lista))
     for i in range(start, end):
@@ -234,32 +290,93 @@ def subsequence_product(lista: list[list[int]], start: int, end: int) -> list[in
     return product
 
 def test_subsequence_product():
+    """
+    Testeaza functionalitatea corecta a functiei subsequence_product
+    :return: no return
+    """
     assert subsequence_product([[2, 3]], 0, 0) == [2, 3]
     assert subsequence_product([[2, 3], [1, 1]], 0, 1) == [-1, 5]
     assert subsequence_product([[1, 1], [2, 0], [0, 1]], 0, 2) == [-2, 2]
 
 def get_sorted_list_by_imaginary_part(lista:list[list[int]])->list[list[int]]:
+    """
+    Ordoneaza crescator o lista de numere complexe dupa partea imaginara
+    :param lista: lista pe care dorim sa o ordonam; de tipul: [[1, 2], [3, 4]]
+    :return: lista ce contine elementele ordonate
+    """
     def sorting_criteria(item:list[int]):
         return item[1]
     sorted_list = lista[:]
     sorted_list.sort(key = sorting_criteria)
     return sorted_list
 
+def test_get_sorted_list_by_imaginary_part():
+    """
+    Testeaza functionalitatea corecta a functiei get_sorted_list_by_imaginary_part
+    :return: no return
+    """
+    assert  get_sorted_list_by_imaginary_part([[1, 2], [3, 4], [1, 1]]) == [[1, 1], [1, 2], [3, 4]]
+    assert get_sorted_list_by_imaginary_part([[1, 1], [2, 2], [3, 3]]) == [[1, 1], [2,2], [3, 3]]
+    assert get_sorted_list_by_imaginary_part([]) == []
+
+
 #filtering - option 5
 def prime_number(number:int)->bool:
+    """
+    Verifica daca un numar introdus este prim
+    :param number: numarul pe care dorim sa il verificam daca este prim
+    :return: true - este prim / false - nu este prim
+    """
+    if number < 2:
+        return False
     for i in range(2, int(math.sqrt(number)) + 1):
         if number % i == 0:
             return False
     return True
 
+def test_prime_number():
+    """
+    Testeaza functionalitatea corecta a functiei prime_number
+    :return: no return
+    """
+    assert prime_number(1) == False
+    assert prime_number(2) == True
+    assert prime_number(3) == True
+    assert prime_number(4) == False
+
+
 def remove_prime_real_part(lista:list[list[int]])->list[list[int]]:
+    """
+    Elimina numerele complexe care au partea reala numar prim dintr-o lista
+    :param lista: lista de unde dorim sa eliminam numerele; de tipul: [[1, 2], [3, 4]]
+    :return: lista rezultata dupa eliminarea elementelor care au partea reala numar prim
+    """
     temp = []
     for i in range(len(lista)):
         if not prime_number(lista[i][0]):
             temp.append(lista[i])
     return temp
 
+def test_remove_prime_real_part():
+    """
+    Testeaza functionalitatea corecta a functiei remove_prime_real_part
+    :return: no return
+    """
+    assert remove_prime_real_part([[1, 2], [3, 4], [4, 5]]) == [[1, 2], [4, 5]]
+    assert remove_prime_real_part([[4, 5], [6, 7], [8,9]]) == [[4, 5], [6, 7], [8, 9]]
+    assert remove_prime_real_part([]) == []
+
 def remove_elements_where_abs_value_doesnt_satisfy_request(lista:list[list[int]], option:int, number:int)->list[list[int]]:
+    """
+    Elimina numerele dintr-o lista ale caror valori absolute nu indeplinesc o conditie introdusa:
+        1. sunt mai mici decat un numar
+        2. sunt egale cu un numar
+        3. sunt mai mari decat un numar
+    :param lista: lista unde dorim sa eliminam elemente; de tipul: [[1, 2], [3, 4]]
+    :param option: optiunea pe care o alegem pentru a filtra numerele
+    :param number: numarul la care ne raportam pentru conditia introdusa
+    :return: o sublista din ce initiala unde au fost filtrate elementele care nu satisfac conditia
+    """
     return_list = []
     for i in lista:
         absolute_value = math.sqrt(i[0] ** 2 + i[1] ** 2)
@@ -271,9 +388,25 @@ def remove_elements_where_abs_value_doesnt_satisfy_request(lista:list[list[int]]
             return_list.append(i)
     return return_list
 
+def test_remove_elements_where_abs_value_doesnt_satisfy_request():
+    """
+    Testeaza functionalitatea corecta a functiei remove_elements_where_abs_value_doesnt_satisfy_request
+    :return: no return
+    """
+    data = [[3, 4], [1, 2], [0, 0], [5, 12]]
+    assert remove_elements_where_abs_value_doesnt_satisfy_request(data, 1, 5) == [[3, 4], [5, 12]]
+    assert remove_elements_where_abs_value_doesnt_satisfy_request(data, 2, 5) == [[1, 2], [0, 0], [5, 12]]
+    assert remove_elements_where_abs_value_doesnt_satisfy_request(data, 3, 5) == [[3, 4], [1, 2], [0, 0]]
+    assert remove_elements_where_abs_value_doesnt_satisfy_request([], 1, 5) == []
+    assert remove_elements_where_abs_value_doesnt_satisfy_request([[3, 4]], 3, 6) == [[3, 4]]
+
 
 #menu
 def menu_interact()->int:
+    """
+    Introduci optiunea pe care doresti sa o urmezi in program
+    :return: optiunea introdusa, sub forma de numar
+    """
     while True:
         try:
             menu_option = int(input("Introdu o optiune din meniu pe care vrei sa o urmezi: \n"))
@@ -306,10 +439,8 @@ def main():
     print("bye bye")
 
 """
-add testing for (4+ 5)
-add documentation (3 - 5)
-add the tasks things (3 - 5)
 implement the menu options for 3 - 5 options
+add the tasks things (3 - 5)
 check on how I can structure the menu and implement the first 2 functionalities as well (optional)
 make the functionality 6 (optional)
 """
