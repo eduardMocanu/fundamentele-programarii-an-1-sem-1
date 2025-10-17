@@ -1,22 +1,63 @@
 """
 Cerințe generale:
-• Folosiți procesul de dezvoltare: Incrementală bazată pe funcționalități (vezi
-curs 1) și Dezvoltare dirijată de teste (curs 2)
-• Planificați iterații pentru 3 laboratoare succesive. În fiecare săptămână primiți
-o notă pentru ce s-a realizat pentru iterația din săptămâna curentă.
-• Prima iterație trebuie sa conțină cel puțin 3 cerințe (din funcționalitățile 3-5)
-• Documentația trebuie să conțină: enunțul, lista de funcționalități, planul de
-iterații, scenarii de rulare, lista de taskuri (activități)
-• Toate funcțiile trebuie să includă specificații, toate funcțiile trebuie sa fie
-testate (funcții de test cu assert) în afară de partea cu interacțiunea utilizator.
-• Separați partea de interfață utilizator de restul aplicației (sa nu aveți funcții
-care fac 2 lucruri: un calcul + tipărire/citire)
-• La prima iterație se cere o soluție procedurală (mai multe funcții toate în
-același modul), varianta finală trebuie să fie modulară (curs 3)
-• Datele de intrare trebuie validate, programul semnalează erorile către
-utilizator.
+• Documentația trebuie să conțină: scenarii de rulare
 
-lab 4 -
+Enunt:
+Creați un program care lucrează cu numere complexe (a + bi). Programul
+gestionează o listă de numere complexe și permite efectuarea repetată a
+următoarelor acțiuni:
+Functionalitati:
+1. Adaugă număr în listă.
+• Adaugă număr complex la sfârșitul listei
+• Inserare număr complex pe o poziție dată.
+2. Modifică elemente din listă.
+• Șterge element de pe o poziție dată.
+• Șterge elementele de pe un interval de poziții.
+• Înlocuiește toate aparițiile unui număr complex cu un alt număr
+complex.
+3. Căutare numere.
+• Tipărește partea imaginara pentru numerele din listă. Se dă intervalul
+de poziții (sub secvența).
+• Tipărește toate numerele complexe care au modulul mai mic decât 10
+• Tipărește toate numerele complexe care au modulul egal cu 10
+4. Operații cu numerele din listă
+• suma numerelor dintr-o subsecventă dată (se da poziția de început și
+sfârșit).
+• Produsul numerelor dintr-o subsecventă dată (se da poziția de început
+și sfârșit).
+• Tipărește lista sortată descrescător după partea imaginara
+5. Filtrare.
+• Filtrare parte reala prim – elimină din listă numerele complexe la care
+partea reala este prim.
+• Filtrare modul – elimina din lista numerele complexe la care modulul
+este <,= sau > decât un număr dat.
+6. Undo
+• Reface ultima operație (lista de numere revine la numerele ce existau
+înainte de ultima operație care a modificat lista) – Nu folosiți funcția
+deepCopy
+
+Tasks:
+ • Adaugă număr complex la sfârșitul listei
+ • Inserare număr complex pe o poziție dată.
+ • Șterge element de pe o poziție dată.
+ • Șterge elementele de pe un interval de poziții.
+ • Înlocuiește toate aparițiile unui număr complex cu un alt număr
+complex.
+ • Tipărește partea imaginara pentru numerele din listă. Se dă intervalul
+de poziții (sub secvența).
+ • Tipărește toate numerele complexe care au modulul mai mic decât 10
+ • Tipărește toate numerele complexe care au modulul egal cu 10
+• Calculează media scorurilor pentru un interval dat (ex. Se da 1 și 5 se
+tipărește media scorurilor participanților 1,2,3,4 și 5
+• Calculează scorul minim pentru un interval de participanți dat.
+• Tipărește participanții dintr-un interval dat care au scorul multiplu de 10.
+• Filtrare participanți care au scorul multiplu unui număr dat. Ex. Se da
+numărul 10, se elimină scorul de la toți participanții care nu au scorul
+multiplu de 10.
+• Filtrare participanți care au scorul mai mic decât un scor dat.
+
+
+lab 4 - iteratia 1
 1. Adaugă număr în listă.
  • Adaugă număr complex la sfârșitul listei
  • Inserare număr complex pe o poziție dată.
@@ -30,7 +71,7 @@ complex.
 de poziții (sub secvența).
  • Tipărește toate numerele complexe care au modulul mai mic decât 10
  • Tipărește toate numerele complexe care au modulul egal cu 10
- 4. Operații pe un subset de participanți.
+4. Operații pe un subset de participanți.
 • Calculează media scorurilor pentru un interval dat (ex. Se da 1 și 5 se
 tipărește media scorurilor participanților 1,2,3,4 și 5
 • Calculează scorul minim pentru un interval de participanți dat.
@@ -51,12 +92,12 @@ def new_list_message():
     afiseaza un mesaj
     :return: no return
     """
-    print("Lista ta este: \n")
+    print("Lista ta este:")
 
 def print_list(lista:list[list[int]]):
     """
     afiseaza lista pe aceeasi linie cu spatiu intre elemente
-    :param list: lista ce dorim sa fie afisata; preconditie: lista de tipul [1, 2, 3]
+    :param lista: lista ce dorim sa fie afisata; preconditie: lista de tipul [1, 2, 3]
     :return: no return
     """
     for i in lista:
@@ -65,7 +106,8 @@ def print_list(lista:list[list[int]]):
 
 def print_list_imaginary_number(lista:list[list[int]]):
     for i in lista:
-        print(f"{i[0]} {i[1]}i", end=", ")
+        print(f"{i[0]} {i[1]}i", end="; ")
+    print()
 
 def read_complex_number()->list[int]:
     while True:
@@ -86,16 +128,16 @@ def read_2_indexes_start_end(lista:list[list[int]])->list[int]:
     index_end = 0
     while True:
         try:
-            index_start = int(input(f"Introdu index-ul de unde doresti sa incepi (intre 0 si {len(lista)-1}) - indexul este inclus"))
-            if index_start > len(lista) - 1 or index_start < 0:
+            index_start = int(input(f"Introdu index-ul de unde doresti sa incepi (intre 0 si {len(lista)-1}) - indexul este inclus: "))
+            if index_start > len(lista)-1 or index_start < 0:
                 raise ValueError
             break
         except ValueError:
             print("Introdu o valoare valida.")
     while True:
         try:
-            index_end = int(input(f"Introdu index-ul unde doresti sa te opresti (intre 0 si {len(lista)-1} si mai mare sau egal ca {index_start}) - indexul este inclus"))
-            if index_end > len(lista) - 1 or index_end < 0 or index_end < index_start:
+            index_end = int(input(f"Introdu index-ul unde doresti sa te opresti (intre 0 si {len(lista)-1} si mai mare sau egal ca {index_start}) - indexul este inclus: "))
+            if index_end > len(lista)-1 or index_end < 0 or index_end < index_start:
                 raise ValueError
             break
         except ValueError:
@@ -137,8 +179,8 @@ def read_whole_number()->int:
 def read_index_to_add(lista:list[list[int]])->int:
     while True:
         try:
-            index = int(input(f"Introdu index-ul unde doresti sa adaugi o valoare (intre 0 si {len(lista)-1}), introdu -1 pentru a adauga la final"))
-            if index > len(lista) - 1 or index < -1:
+            index = int(input(f"Introdu index-ul unde doresti sa adaugi o valoare (intre 0 si {len(lista)}), introdu -1 pentru a adauga la final: "))
+            if index > len(lista) or index < -1:
                 raise ValueError
             return index
         except ValueError:
@@ -274,12 +316,12 @@ def subsequence_sum(lista:list[list[int]], start:int, end:int)->list[int]:
     :param end: indexul unde dorim sa incetam sa calculam suma
     :return: lista de 2 elemente care contine suma elementelor reale pe indexul 0, iar pe indexul 1 suma numerelor imaginare
     """
-    sum = [0, 0]
+    suma = [0, 0]
     end = min(end+1, len(lista))
     for i in range(start, end):
-        sum[0] += lista[i][0]
-        sum[1] += lista[i][1]
-    return sum
+        suma[0] += lista[i][0]
+        suma[1] += lista[i][1]
+    return suma
 
 def test_subsequence_sum():
     """
@@ -319,14 +361,14 @@ def test_subsequence_product():
 
 def get_sorted_list_by_imaginary_part(lista:list[list[int]])->list[list[int]]:
     """
-    Ordoneaza crescator o lista de numere complexe dupa partea imaginara
+    Ordoneaza descrescator o lista de numere complexe dupa partea imaginara
     :param lista: lista pe care dorim sa o ordonam; de tipul: [[1, 2], [3, 4]]
     :return: lista ce contine elementele ordonate
     """
     def sorting_criteria(item:list[int]):
         return item[1]
     sorted_list = lista[:]
-    sorted_list.sort(key = sorting_criteria)
+    sorted_list.sort(reverse=True, key = sorting_criteria)
     return sorted_list
 
 def test_get_sorted_list_by_imaginary_part():
@@ -334,8 +376,8 @@ def test_get_sorted_list_by_imaginary_part():
     Testeaza functionalitatea corecta a functiei get_sorted_list_by_imaginary_part
     :return: no return
     """
-    assert  get_sorted_list_by_imaginary_part([[1, 2], [3, 4], [1, 1]]) == [[1, 1], [1, 2], [3, 4]]
-    assert get_sorted_list_by_imaginary_part([[1, 1], [2, 2], [3, 3]]) == [[1, 1], [2,2], [3, 3]]
+    assert  get_sorted_list_by_imaginary_part([[1, 2], [3, 4], [1, 1]]) == [[3, 4], [1, 2], [1, 1]]
+    assert get_sorted_list_by_imaginary_part([[1, 1], [2, 2], [3, 3]]) == [[3, 3], [2,2], [1, 1]]
     assert get_sorted_list_by_imaginary_part([]) == []
 
 
@@ -377,7 +419,7 @@ def remove_elements_where_abs_value_doesnt_satisfy_request(lista:list[list[int]]
         absolute_value = math.sqrt(i[0] ** 2 + i[1] ** 2)
         if option == 1 and absolute_value >= number:
             return_list.append(i)
-        elif option == 2 and (absolute_value < number or absolute_value > number):
+        elif option == 2 and absolute_value != number:
             return_list.append(i)
         elif option == 3 and absolute_value <= number:
             return_list.append(i)
@@ -394,6 +436,22 @@ def test_remove_elements_where_abs_value_doesnt_satisfy_request():
     assert remove_elements_where_abs_value_doesnt_satisfy_request(data, 3, 5) == [[3, 4], [1, 2], [0, 0]]
     assert remove_elements_where_abs_value_doesnt_satisfy_request([], 1, 5) == []
     assert remove_elements_where_abs_value_doesnt_satisfy_request([[3, 4]], 3, 6) == [[3, 4]]
+
+def test_function():
+    """
+    ruleaza toate testele prezente in program pentru a se asigura ca functionalitatile sunt corecte
+    :return: no return
+    """
+    test_get_all_imaginary_numbers_where_abs_value_equals_10()
+    test_get_all_imaginary_numbers_where_abs_value_less_than_10()
+    test_prime_number()
+    test_get_sorted_list_by_imaginary_part()
+    test_subsequence_product()
+    test_subsequence_sum()
+    test_remove_prime_real_part()
+    test_remove_elements_where_abs_value_doesnt_satisfy_request()
+    test_replace_complex_value_with_another_one()
+    test_remove_elements_subsequence()
 
 
 #menu
@@ -412,47 +470,54 @@ def menu_interact(maximum_option:int)->int:
             print("Introdu o valoare valida")
 
 def print_menu_option_1():
-    """Afișează opțiunile pentru adăugarea numerelor complexe în listă."""
+    """Afișează opțiunile pentru adăugarea numerelor complexe în listă.
+    :return: no return"""
     print("1. ADAUGA NUMAR COMPLEX LA SFARSITUL LISTEI")
     print("2. INSERARE NUMAR COMPLEX PE O POZITIE DATA")
 
 
 def print_menu_option_2():
-    """Afișează opțiunile pentru modificarea elementelor din listă."""
+    """Afișează opțiunile pentru modificarea elementelor din listă.
+    :return: no return"""
     print("1. STERGE ELEMENT DE PE O POZITIE DATA")
     print("2. STERGE ELEMENTELE DE PE UN INTERVAL DE POZITII")
     print("3. INLOCUIESTE TOATE APARITIILE UNUI NUMAR COMPLEX CU UN ALT NUMAR COMPLEX")
 
 
 def print_menu_option_3():
-    """Afișează opțiunile pentru afișarea și filtrarea numerelor complexe."""
+    """Afișează opțiunile pentru afișarea și filtrarea numerelor complexe.
+    :return: no return"""
     print("1. TIPARESTE PARTEA IMAGINARA PENTRU NUMERELE DIN LISTA (se da un interval de pozitii)")
     print("2. TIPARESTE TOATE NUMERELE COMPLEXE CARE AU MODULUL MAI MIC DECAT 10")
     print("3. TIPARESTE TOATE NUMERELE COMPLEXE CARE AU MODULUL EGAL CU 10")
 
 
 def print_menu_option_4():
-    """Afișează opțiunile pentru efectuarea operațiilor matematice asupra listei."""
+    """Afișează opțiunile pentru efectuarea operațiilor matematice asupra listei.
+    :return: no return"""
     print("1. SUMA NUMERELOR INTRE 2 INDICI")
     print("2. PRODUSUL NUMERELOR INTRE 2 INDICI")
     print("3. TIPARESTE LISTA SORTATA DESCRESCATOR DUPA PARTEA IMAGINARA")
 
 
 def print_menu_option_5():
-    """Afișează opțiunile pentru filtrarea numerelor complexe."""
+    """Afișează opțiunile pentru filtrarea numerelor complexe.
+    :return: no return"""
     print("1. ELIMINA DIN LISTA NUMERELE COMPLEXE LA CARE PARTEA REALA ESTE NUMAR PRIM")
     print("2. ELIMINA DIN LISTA NUMERELE COMPLEXE LA CARE MODULUL ESTE <, =, > DECAT UN NUMAR DAT")
 
 
 def print_submenu_option_5():
-    """Afișează submeniul pentru condițiile de filtrare (<, =, >)."""
+    """Afișează submeniul pentru condițiile de filtrare (<, =, >).
+    :return: no return"""
     print("1. <")
     print("2. =")
     print("3. >")
 
 
 def print_main_menu():
-    """Afișează meniul principal al aplicației."""
+    """Afișează meniul principal al aplicației.
+    :return: no return"""
     print("0. IESIRE (poate fi introdus oricand pentru a opri programul)")
     print("1. ADAUGA NUMAR IN LISTA")
     print("2. MODIFICA ELEMENTE DIN LISTA")
@@ -462,14 +527,24 @@ def print_main_menu():
     print("6. UNDO")
 
 
-def middleware_functions_list(lista_empty: bool) -> bool:
+def middleware_functions_list(has_elements: bool) -> bool:
     """
     Verifică dacă lista conține elemente înainte de a continua execuția.
     :param lista_empty: True dacă lista este goală, False dacă are elemente.
     :return: False dacă lista este goală, True dacă se poate continua.
     """
-    if lista_empty:
+    if not has_elements:
         print("Mai intai populeaza lista")
+        return False
+    return True
+
+def check_list_length(lista:list[list[int]]) -> bool:
+    """
+    Verifica daca o lista este goala sau nu
+    :param lista: lista unde dorim sa verificam daca este goala sau nu
+    :return: True - nu este goala; False - este goala
+    """
+    if len(lista) == 0:
         return False
     return True
 
@@ -479,25 +554,25 @@ def main():
     while True:
         print_main_menu()
         menu_option = menu_interact(6)
+        elemente_citite = check_list_length(list_main)
         if menu_option == 0:
             break
         elif menu_option == 1:
             print_menu_option_1()
             option = menu_interact(2)
-            elemente_citite = True
             if option == 0:
                 break
             elif option == 1:
                 number = read_complex_number()
                 add_number_complex_to_list(list_main, -1, number)
                 new_list_message()
-                print_list(list_main)
+                print_list_imaginary_number(list_main)
             elif option == 2:
                 number = read_complex_number()
                 index = read_index_to_add(list_main)
                 add_number_complex_to_list(list_main, index, number)
                 new_list_message()
-                print_list(list_main)
+                print_list_imaginary_number(list_main)
         elif middleware_functions_list(elemente_citite):
             if menu_option == 2:
                 pass
@@ -519,12 +594,14 @@ def main():
                     break
                 elif option == 1:
                     indexes = read_2_indexes_start_end(list_main)
-                    print(f"suma este: {subsequence_sum(list_main, indexes[0], indexes[1])}")
+                    suma = subsequence_sum(list_main, indexes[0], indexes[1])
+                    print(f"suma este: {suma[0]} {suma[1]}i")
                 elif option == 2:
                     indexes = read_2_indexes_start_end(list_main)
-                    print(f"produsul este: {subsequence_product(list_main, indexes[0], indexes[1])}")
+                    product = subsequence_product(list_main, indexes[0], indexes[1])
+                    print(f"produsul este: {product[0]} {product[1]}i")
                 elif option == 3:
-                    print_list(get_sorted_list_by_imaginary_part(list_main))
+                    print_list_imaginary_number(get_sorted_list_by_imaginary_part(list_main))
             elif menu_option == 5:
                 print_menu_option_5()
                 option = menu_interact(2)
@@ -533,19 +610,21 @@ def main():
                 elif option == 1:
                     list_main = remove_prime_real_part(list_main)[:]
                     new_list_message()
-                    print_list(list_main)
+                    print_list_imaginary_number(list_main)
                 elif option == 2:
                     print_submenu_option_5()
                     submenu = menu_interact(3)
                     print("Numarul cu care doresti sa compari este: ")
                     number = read_whole_number()
                     list_main = remove_elements_where_abs_value_doesnt_satisfy_request(list_main, submenu, number)[:]
+                    new_list_message()
+                    print_list_imaginary_number(list_main)
 
     print("bye bye")
 
 """
-add the tasks things (3 - 5)
 check on how I can structure the menu and implement the first 2 functionalities as well (optional)
 make the functionality 6 (optional)
 """
+test_function()
 main()
