@@ -243,6 +243,7 @@ def print_imaginary_side(lista:list[list[int]], indexes_print:list[int]):
     :param indexes_print: o lista de 2 elemente care contine pe pozitia 0 indexul de start iar pe pozitia 1 ultimul index; de tipul: [1, 2]
     :return: no return
     """
+    print(f"Partea imaginara a numerelor cuprinse intre pozitiile {indexes_print[0]} si {indexes_print[1]} este: ")
     for i in range(indexes_print[0], indexes_print[1] + 1):
         print(lista[i][1], end = " ")
     print()
@@ -582,10 +583,13 @@ def main():
                 if option == 0:
                     break
                 elif option == 1:
+                    new_list_message()
                     print_imaginary_side(list_main, read_2_indexes_start_end(list_main))
                 elif option == 2:
+                    new_list_message()
                     print_all_imaginary_numbers_where_abs_value_less_than_10(list_main)
                 elif option == 3:
+                    new_list_message()
                     print_all_imaginary_numbers_where_abs_value_equals_10(list_main)
             elif menu_option == 4:
                 print_menu_option_4()
@@ -601,6 +605,7 @@ def main():
                     product = subsequence_product(list_main, indexes[0], indexes[1])
                     print(f"produsul este: {product[0]} {product[1]}i")
                 elif option == 3:
+                    new_list_message()
                     print_list_imaginary_number(get_sorted_list_by_imaginary_part(list_main))
             elif menu_option == 5:
                 print_menu_option_5()
