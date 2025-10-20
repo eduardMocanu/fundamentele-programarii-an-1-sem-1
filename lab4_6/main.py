@@ -94,22 +94,21 @@ def new_list_message():
     """
     print("Lista ta este:")
 
-def print_list(lista:list[list[int]]):
+def print_list_imaginary_number(lista:list[list[int]]):
     """
-    afiseaza lista pe aceeasi linie cu spatiu intre elemente
-    :param lista: lista ce dorim sa fie afisata; preconditie: lista de tipul [1, 2, 3]
+    afiseaza partea imaginara a unor numere complexe din lista
+    :param lista: lista pentru care dorim sa afisam; de tipul: [[1, 2], [3, 4]]
     :return: no return
     """
-    for i in lista:
-        print(i, end=" ")
-    print()
-
-def print_list_imaginary_number(lista:list[list[int]]):
     for i in lista:
         print(f"{i[0]} {i[1]}i", end="; ")
     print()
 
 def read_complex_number()->list[int]:
+    """
+    permite introducerea de la tastatura a unui numar complex
+    :return: numarul citit; de tipu: [1, 2] - 1 parte reala; 2 - parte imaginara
+    """
     while True:
         try:
             parte_reala = int(input("Introdu partea reala a numarului pe care vrei sa il citesti: "))
@@ -168,6 +167,10 @@ def test_prime_number():
     assert prime_number(4) == False
 
 def read_whole_number()->int:
+    """
+    permite citirea unui numar intreg de la tastatura
+    :return: numarul citit care este garantat un int
+    """
     while True:
         try:
             number = int(input("Introdu numarul: \n"))
@@ -177,6 +180,11 @@ def read_whole_number()->int:
 
 #add numbers to list - option 1
 def read_index_to_add(lista:list[list[int]])->int:
+    """
+    permite citirea unui index (valabil pentru lista) index >= 0 si index < len(lista)
+    :param lista: lista pentru care dorim sa citim un index
+    :return: indexul citit
+    """
     while True:
         try:
             index = int(input(f"Introdu index-ul unde doresti sa adaugi o valoare (intre 0 si {len(lista)}), introdu -1 pentru a adauga la final: "))
@@ -187,6 +195,13 @@ def read_index_to_add(lista:list[list[int]])->int:
             print("Introdu o valoare valida.")
 
 def add_number_complex_to_list(lista:list[list[int]], index:int, number:list[int]):
+    """
+    to be redone
+    :param lista:
+    :param index:
+    :param number:
+    :return:
+    """
     if index == -1:
         lista.append(number)
     else:
@@ -243,7 +258,6 @@ def print_imaginary_side(lista:list[list[int]], indexes_print:list[int]):
     :param indexes_print: o lista de 2 elemente care contine pe pozitia 0 indexul de start iar pe pozitia 1 ultimul index; de tipul: [1, 2]
     :return: no return
     """
-    print(f"Partea imaginara a numerelor cuprinse intre pozitiile {indexes_print[0]} si {indexes_print[1]} este: ")
     for i in range(indexes_print[0], indexes_print[1] + 1):
         print(lista[i][1], end = " ")
     print()
@@ -583,8 +597,9 @@ def main():
                 if option == 0:
                     break
                 elif option == 1:
+                    indexes = read_2_indexes_start_end(list_main)
                     new_list_message()
-                    print_imaginary_side(list_main, read_2_indexes_start_end(list_main))
+                    print_imaginary_side(list_main, indexes)
                 elif option == 2:
                     new_list_message()
                     print_all_imaginary_numbers_where_abs_value_less_than_10(list_main)
