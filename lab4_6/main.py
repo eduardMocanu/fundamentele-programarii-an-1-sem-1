@@ -202,7 +202,7 @@ def add_number_complex_to_list(lista:list[list[int]], index:int, number:list[int
     :param number: numarul pe care dorim sa il adaugam
     :return: lista cu numarul adaugat pe pozitia dorita
     """
-    lista_temp = lista[:]
+    lista_temp = [sublist[:] for sublist in lista]
     if index == -1:
         lista_temp.append(number)
     else:
@@ -241,7 +241,7 @@ def remove_element_on_index(lista:list[list[int]], index:int)->list[list[int]]:
     :param index: indexul unde dorim sa stergem elementul
     :return: lista modificata (cu elementul sters)
     """
-    lista_temp = lista[:]
+    lista_temp = [sublist[:] for sublist in lista]
     lista_temp.pop(index)
     return lista_temp
 
@@ -284,7 +284,7 @@ def replace_complex_value_with_another_one(lista:list[list[int]], to_be_replaced
     :param to_replace: valoarea cu care se inlocuieste
     :return: lista modificata
     """
-    lista_temp = lista[:]
+    lista_temp = [sublist[:] for sublist in lista]
     for i in range(len(lista)):
         if lista_temp[i] == to_be_replaced:
             lista_temp[i] = to_replace
