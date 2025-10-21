@@ -250,7 +250,7 @@ def test_remove_element_on_index():
     permite testearea functionalitatii corecte a functiei remove_element_on_index
     :return: no return
     """
-    assert remove_element_on_index([[1, 2], [3, 4], 0]) == [[3, 4]]
+    assert remove_element_on_index([[1, 2], [3, 4]], 0) == [[3, 4]]
     assert remove_element_on_index([[1, 2], [3, 4], [5, 6]], 1) == [[1, 2], [5, 6]]
     assert remove_element_on_index([[1, 2], [3, 4], [5, 6]], 2) == [[1, 2], [3, 4]]
 
@@ -284,10 +284,11 @@ def replace_complex_value_with_another_one(lista:list[list[int]], to_be_replaced
     :param to_replace: valoarea cu care se inlocuieste
     :return: lista modificata
     """
+    lista_temp = lista[:]
     for i in range(len(lista)):
-        if lista[i] == to_be_replaced:
-            lista[i] = to_replace
-    return lista
+        if lista_temp[i] == to_be_replaced:
+            lista_temp[i] = to_replace
+    return lista_temp
 
 def test_replace_complex_value_with_another_one():
     """
@@ -599,7 +600,7 @@ def print_main_menu():
 def middleware_functions_list(has_elements: bool) -> bool:
     """
     Verifică dacă lista conține elemente înainte de a continua execuția.
-    :param lista_empty: True dacă lista este goală, False dacă are elemente.
+    :param has_elements: False dacă lista este goală, True dacă are elemente.
     :return: False dacă lista este goală, True dacă se poate continua.
     """
     if not has_elements:
