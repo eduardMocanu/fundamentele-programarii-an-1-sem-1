@@ -194,21 +194,37 @@ def read_index_to_add(lista:list[list[int]])->int:
         except ValueError:
             print("Introdu o valoare valida.")
 
-def add_number_complex_to_list(lista:list[list[int]], index:int, number:list[int]):
+def add_number_complex_to_list(lista:list[list[int]], index:int, number:list[int])->list[list[int]]:
     """
-    to be redone
-    :param lista:
-    :param index:
-    :param number:
-    :return:
+    adauga un numar complex la o lista; de tipul: [[1, 2], [2, 3]]
+    :param lista: lista in care dorim sa adaugam numarul
+    :param index: pozitia in care dorim sa adaugam numarul
+    :param number: numarul pe care dorim sa il adaugam
+    :return: lista cu numarul adaugat pe pozitia dorita
     """
+    lista_temp = lista[:]
     if index == -1:
-        lista.append(number)
+        lista_temp.append(number)
     else:
-        lista.insert(index, number)
+        lista_temp.insert(index, number)
+    return lista_temp
+
+def test_add_number_complex_to_list():
+    """
+    testeaza functionalitatea corecta a functiei add_number_complex_to_list
+    :return: no return
+    """
+    assert add_number_complex_to_list([[1, 2], [3, 4]], -1, [5, 6]) == [[1, 2], [3, 4], [5, 6]]
+    assert add_number_complex_to_list([[1, 2], [3, 4]], 0, [5, 6]) == [[5, 6], [1, 2], [3, 4]]
+    assert add_number_complex_to_list([[1, 2], [3, 4]], 1, [5, 6]) == [[1, 2], [5, 6], [3, 4]]
 
 #modify elements in list - option 2
 def read_index_to_remove_item(lista:list[list[int]])->int:
+    """
+    permite citirea unui index dintr-o lista pentru a oferi pozitia pe care dorim sa eliminam un element
+    :param lista: lista de unde dorim sa citim un astfel de index
+    :return: indexul citit
+    """
     while True:
         try:
             index = int(input(f"Introdu index-ul unde doresti sa stergi valoarea (intre 0 si {len(lista)-1})"))
@@ -218,34 +234,69 @@ def read_index_to_remove_item(lista:list[list[int]])->int:
         except ValueError:
             print("Introdu o valoare valida.")
 
-def remove_element_on_index(lista:list[list[int]], index:int):
-    lista.pop(index)
+def remove_element_on_index(lista:list[list[int]], index:int)->list[list[int]]:
+    """
+    elimina un element din lista la o pozitie data
+    :param lista: lista de unde dorim sa stergem elementul
+    :param index: indexul unde dorim sa stergem elementul
+    :return: lista modificata (cu elementul sters)
+    """
+    lista_temp = lista[:]
+    lista_temp.pop(index)
+    return lista_temp
+
+def test_remove_element_on_index():
+    """
+    permite testearea functionalitatii corecte a functiei remove_element_on_index
+    :return: no return
+    """
+    assert remove_element_on_index([[1, 2], [3, 4], 0]) == [[3, 4]]
+    assert remove_element_on_index([[1, 2], [3, 4], [5, 6]], 1) == [[1, 2], [5, 6]]
+    assert remove_element_on_index([[1, 2], [3, 4], [5, 6]], 2) == [[1, 2], [3, 4]]
 
 
 def remove_elements_subsequence(lista:list[list[int]], index_start:int, index_end:int)->list[list[int]]:
+    """
+    Permite eliminarea unei subsecvente din lista intre 2 indici
+    :param lista: lista din care dorim sa eliminam o subsecventa
+    :param index_start: indexul de start de unde incepe stergerea
+    :param index_end: indexul unde dorim sa oprim stergerea
+    :return: lista cu subsecventa eliminata
+    """
     lista = lista[:index_start] + lista[index_end + 1:]
     return lista
 
 def test_remove_elements_subsequence():
+    """
+    testeaza functionalitatea corecta a functiei remove_elements_subsequence
+    :return: no return
+    """
     assert remove_elements_subsequence([[1, 2], [2, 3]], 0, 1) == []
     assert remove_elements_subsequence([[1, 2], [2, 3], [4, 5]], 0, 1) == [[4, 5]]
     assert remove_elements_subsequence([], 10, 11) == []
 
 
-def replace_complex_value_with_another_one(lista:list[list[int]], to_be_replaced:list[int], to_replace:list[int]):
+def replace_complex_value_with_another_one(lista:list[list[int]], to_be_replaced:list[int], to_replace:list[int])->list[list[int]]:
+    """
+    permite inlocuirea tuturor prezentelor unui numar complex cu un altul
+    :param lista: lista in care dorim sa inlocuim valoarea unui numar complex
+    :param to_be_replaced: valoarea care trebuie inlocuita
+    :param to_replace: valoarea cu care se inlocuieste
+    :return: lista modificata
+    """
     for i in range(len(lista)):
         if lista[i] == to_be_replaced:
             lista[i] = to_replace
     return lista
 
 def test_replace_complex_value_with_another_one():
+    """
+    testeaza functionalitatea corecta a functiei replace_complex_value_with_another_one
+    :return: no return
+    """
     assert replace_complex_value_with_another_one([[1, 2], [3, 4]], [1, 2], [10, 11]) == [[10, 11], [3, 4]]
     assert replace_complex_value_with_another_one([[1, 2], [3, 4], [5, 6], [5, 6], [5, 6]], [5, 6], [1, 4]) == [[1, 2], [3, 4], [1, 4], [1, 4], [1, 4]]
     assert replace_complex_value_with_another_one([], [5, 6], [1, 4]) == []
-
-
-def print_menu_modify_elements():
-    pass
 
 
 #---------------------LAB 4
@@ -467,6 +518,9 @@ def test_function():
     test_remove_elements_where_abs_value_doesnt_satisfy_request()
     test_replace_complex_value_with_another_one()
     test_remove_elements_subsequence()
+    test_add_number_complex_to_list()
+    test_remove_element_on_index()
+    test_replace_complex_value_with_another_one()
 
 
 #menu
@@ -579,13 +633,13 @@ def main():
                 break
             elif option == 1:
                 number = read_complex_number()
-                add_number_complex_to_list(list_main, -1, number)
+                list_main = add_number_complex_to_list(list_main, -1, number)
                 new_list_message()
                 print_list_imaginary_number(list_main)
             elif option == 2:
                 number = read_complex_number()
                 index = read_index_to_add(list_main)
-                add_number_complex_to_list(list_main, index, number)
+                list_main = add_number_complex_to_list(list_main, index, number)
                 new_list_message()
                 print_list_imaginary_number(list_main)
         elif middleware_functions_list(elemente_citite):
