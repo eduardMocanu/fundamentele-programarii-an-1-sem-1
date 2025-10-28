@@ -47,15 +47,15 @@ complex.
 de poziții (sub secvența).
  • Tipărește toate numerele complexe care au modulul mai mic decât 10
  • Tipărește toate numerele complexe care au modulul egal cu 10
-• Calculează media scorurilor pentru un interval dat (ex. Se da 1 și 5 se
-tipărește media scorurilor participanților 1,2,3,4 și 5
-• Calculează scorul minim pentru un interval de participanți dat.
-• Tipărește participanții dintr-un interval dat care au scorul multiplu de 10.
-• Filtrare participanți care au scorul multiplu unui număr dat. Ex. Se da
-numărul 10, se elimină scorul de la toți participanții care nu au scorul
-multiplu de 10.
-• Filtrare participanți care au scorul mai mic decât un scor dat.
-
+ • suma numerelor dintr-o subsecventă dată (se da poziția de început și
+sfârșit).
+ • Produsul numerelor dintr-o subsecventă dată (se da poziția de început
+și sfârșit).
+ • Tipărește lista sortată descrescător după partea imaginara
+ • Filtrare parte reala prim – elimină din listă numerele complexe la care
+partea reala este prim.
+ • Filtrare modul – elimina din lista numerele complexe la care modulul
+este <,= sau > decât un număr dat.
 
 lab 4 - iteratia 1
 1. Adaugă număr în listă.
@@ -81,6 +81,7 @@ tipărește media scorurilor participanților 1,2,3,4 și 5
 numărul 10, se elimină scorul de la toți participanții care nu au scorul
 multiplu de 10.
 • Filtrare participanți care au scorul mai mic decât un scor dat.
+Implementare meniu optiunile: 1, 3, 4, 5
 lab 5 -
 lab 6 -
 """
@@ -645,7 +646,28 @@ def main():
                 print_list_imaginary_number(list_main)
         elif middleware_functions_list(elemente_citite):
             if menu_option == 2:
-                pass
+                print_menu_option_2()
+                option = menu_interact(3)
+                if option == 0:
+                    break
+                elif option == 1:
+                    index_to_remove = read_index_to_remove_item(list_main)
+                    list_main = remove_element_on_index(list_main, index_to_remove)
+                    new_list_message()
+                    print_list_imaginary_number(list_main)
+                elif option == 2:
+                    indexes_to_remove = read_2_indexes_start_end(list_main)
+                    list_main = remove_elements_subsequence(list_main, indexes_to_remove[0], indexes_to_remove[1])
+                    new_list_message()
+                    print_list_imaginary_number(list_main)
+                elif option == 3:
+                    print("Introdu numarul pe care doresti sa il inlocuiesti")
+                    complex_number_to_be_replaced = read_complex_number()
+                    print("Introdu numarul cu care doresti sa inlocuiesti")
+                    complex_number_to_replace = read_complex_number()
+                    list_main = replace_complex_value_with_another_one(list_main, complex_number_to_be_replaced, complex_number_to_replace)
+                    new_list_message()
+                    print_list_imaginary_number(list_main)
             elif menu_option == 3:
                 print_menu_option_3()
                 option = menu_interact(3)
@@ -698,8 +720,7 @@ def main():
     print("bye bye")
 
 """
-check on how I can structure the menu and implement the first 2 functionalities as well (optional)
-make the functionality 6 (optional)
+make the functionality 6
 """
 test_function()
 main()
