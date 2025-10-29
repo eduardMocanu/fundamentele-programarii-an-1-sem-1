@@ -1,37 +1,30 @@
-"""x = int(input("da un nr n pentru a putea iti da suma a n numere "))
-s = 0
-for i in range(x):
-    s += int(input("Introdu in numar "))
-print(f"suma este {s}")
+class Test:
+    __number_of_calls = 0
+    def __init__(self, num):
+        self.__test_number = num
+        Test.__number_of_calls += 1
 
-import math
+    def get_test_number(self):
+        return self.__test_number
 
-def prim(x:int):
-    if(x < 2):
-        return False
-    for i in range(2, int(math.sqrt(x)) + 1):
-        if x % i == 0:
-            return False;
-    return True
+    def set_test_number(self, num):
+        self.__test_number = num
 
-x = int(input("Introdu un nr pentru a vedea daca este prim"))
-print(prim(x))
+    @classmethod
+    def get_number_of_calls(cls):
+        return cls.__number_of_calls
 
-x = int(input("nr 1:"))
-y = int(input("nr 2:"))
-
-r = x % y
-while(r != 0):
-    x = y
-    y = r
-    r = x % y
-print(y)
+    def __str__(self):
+        return f"Number: {self.__test_number} and {Test.__number_of_calls} 2 instances"
 
 
-s = "test test test"
-print(s.split(" "))
-"""
+test = Test(200)
+print(test.get_test_number())
+test.set_test_number(2000)
+print(test.get_test_number())
 
-import test.test1
+test1 = Test(1000)
 
-test.test1.print_something()
+print(Test.get_number_of_calls())
+
+print(test)
