@@ -83,684 +83,15 @@ multiplu de 10.
 • Filtrare participanți care au scorul mai mic decât un scor dat.
 Implementare meniu optiunile: 1, 3, 4, 5
 lab 5 -
+ modularizare proiect
+ 6. Undo
+• Reface ultima operație (lista de numere revine la numerele ce existau
+înainte de ultima operație care a modificat lista) – Nu folosiți funcția
+deepCopy
 lab 6 -
 """
-import math
-
-#utilities
-
-def get_real_part_complex_element(element:dict[str, int])->int:
-    real_elem = element["real"]
-    return real_elem
-
-def get_imaginary_part_complex_element(element:dict[str, int])->int:
-    imag_elem = element["imag"]
-    return imag_elem
-
-def set_real_part_complex_element(element:dict[str, int], value:int):
-    element["real"] = value
-
-def set_imag_part_complex_element(element:dict[str, int], value:int):
-    element["imag"] = value
-
-def create_dict_complex_number(value_real:int, value_imag:int)->dict[str, int]:
-    temp = {}
-    temp["real"] = value_real
-    temp["imag"] = value_imag
-    return temp
-
-def new_list_message():
-    """
-    afiseaza un mesaj
-    :return: no return
-    """
-    print("Lista ta este:")
-
-def print_list_imaginary_number(lista:list[dict[str, int]]):
-    """
-    afiseaza partea imaginara a unor numere complexe din lista
-    :param lista: lista pentru care dorim sa afisam; de tipul: [[1, 2], [3, 4]]
-    :return: no return
-    """
-    for i in lista:
-        print(f"{get_real_part_complex_element(i)} {get_imaginary_part_complex_element(i)}i", end="; ")
-    print()
-
-def read_complex_number()-> dict[str, int]:
-    """
-    permite introducerea de la tastatura a unui numar complex
-    :return: numarul citit; de tipu: [1, 2] - 1 parte reala; 2 - parte imaginara
-    """
-    while True:
-        try:
-            parte_reala = int(input("Introdu partea reala a numarului pe care vrei sa il citesti: "))
-            parte_imaginara = int(input("Introdu partea imaginara (fara i) a numarului pe care vrei sa il citesti: "))
-            return create_dict_complex_number(parte_reala, parte_imaginara)
-        except ValueError:
-            print("Valoare invalida, reintrodu numarul")
-
-def read_2_indexes_start_end(lista:list[dict[str, int]])->list[int]:
-    """
-    Citeste 2 pozitii din lista inceputul, respectiv sfarsitul
-    :param lista: lista pentru care dorim sa citim cei 2 indici; de tipul: [[1, 2], [3, 4]]
-    :return: o lista ce contine indexul de start pe pozitia 0 si indexul de sfarsit pe pozitia 1
-    """
-    index_start = 0
-    index_end = 0
-    while True:
-        try:
-            index_start = int(input(f"Introdu index-ul de unde doresti sa incepi (intre 0 si {len(lista)-1}) - indexul este inclus: "))
-            if index_start > len(lista)-1 or index_start < 0:
-                raise ValueError
-            break
-        except ValueError:
-            print("Introdu o valoare valida.")
-    while True:
-        try:
-            index_end = int(input(f"Introdu index-ul unde doresti sa te opresti (intre 0 si {len(lista)-1} si mai mare sau egal ca {index_start}) - indexul este inclus: "))
-            if index_end > len(lista)-1 or index_end < 0 or index_end < index_start:
-                raise ValueError
-            break
-        except ValueError:
-            print("Introdu o valoare valida.")
-    return [index_start, index_end]
-
-def prime_number(number:int)->bool:
-    """
-    Verifica daca un numar introdus este prim
-    :param number: numarul pe care dorim sa il verificam daca este prim
-    :return: true - este prim / false - nu este prim
-    """
-    if number < 2:
-        return False
-    for i in range(2, int(math.sqrt(number)) + 1):
-        if number % i == 0:
-            return False
-    return True
-
-def test_prime_number():
-    """
-    Testeaza functionalitatea corecta a functiei prime_number
-    :return: no return
-    """
-    assert prime_number(1) == False
-    assert prime_number(2) == True
-    assert prime_number(3) == True
-    assert prime_number(4) == False
-
-def read_whole_number()->int:
-    """
-    permite citirea unui numar intreg de la tastatura
-    :return: numarul citit care este garantat un int
-    """
-    while True:
-        try:
-            number = int(input("Introdu numarul: \n"))
-            return number
-        except ValueError:
-            print("Introdu o valoare valida")
-
-#add numbers to list - option 1
-def read_index_to_add(lista:list[dict[str, int]])->int:
-    """
-    permite citirea unui index (valabil pentru lista) index >= 0 si index < len(lista)
-    :param lista: lista pentru care dorim sa citim un index
-    :return: indexul citit
-    """
-    while True:
-        try:
-            index = int(input(f"Introdu index-ul unde doresti sa adaugi o valoare (intre 0 si {len(lista)}), introdu -1 pentru a adauga la final: "))
-            if index > len(lista) or index < -1:
-                raise ValueError
-            return index
-        except ValueError:
-            print("Introdu o valoare valida.")
-
-def add_number_complex_to_list(lista:list[dict[str, int]], index:int, number:dict[str, int])->list[dict[str, int]]:
-    """
-    adauga un numar complex la o lista; de tipul: [[1, 2], [2, 3]]
-    :param lista: lista in care dorim sa adaugam numarul
-    :param index: pozitia in care dorim sa adaugam numarul
-    :param number: numarul pe care dorim sa il adaugam
-    :return: lista cu numarul adaugat pe pozitia dorita
-    """
-    lista_temp = lista[:]
-    if index == -1:
-        lista_temp.append(number)
-    else:
-        lista_temp.insert(index, number)
-    return lista_temp
-
-def test_add_number_complex_to_list():
-    """
-    Testează funcționalitatea funcției add_number_complex_to_list.
-    """
-    l1 = [create_dict_complex_number(1, 2), create_dict_complex_number(3, 4)]
-    expected = [create_dict_complex_number(1, 2), create_dict_complex_number(3, 4), create_dict_complex_number(5, 6)]
-    assert add_number_complex_to_list(l1.copy(), -1, create_dict_complex_number(5, 6)) == expected
-
-    l2 = [create_dict_complex_number(1, 2), create_dict_complex_number(3, 4)]
-    expected = [create_dict_complex_number(5, 6), create_dict_complex_number(1, 2), create_dict_complex_number(3, 4)]
-    assert add_number_complex_to_list(l2.copy(), 0, create_dict_complex_number(5, 6)) == expected
-
-    l3 = [create_dict_complex_number(1, 2), create_dict_complex_number(3, 4)]
-    expected = [create_dict_complex_number(1, 2), create_dict_complex_number(5, 6), create_dict_complex_number(3, 4)]
-    assert add_number_complex_to_list(l3.copy(), 1, create_dict_complex_number(5, 6)) == expected
-
-#modify elements in list - option 2
-def read_index_to_remove_item(lista:list[dict[str, int]])->int:
-    """
-    permite citirea unui index dintr-o lista pentru a oferi pozitia pe care dorim sa eliminam un element
-    :param lista: lista de unde dorim sa citim un astfel de index
-    :return: indexul citit
-    """
-    while True:
-        try:
-            index = int(input(f"Introdu index-ul unde doresti sa stergi valoarea (intre 0 si {len(lista)-1})"))
-            if index > len(lista) - 1 or index < 0:
-                raise ValueError
-            return index
-        except ValueError:
-            print("Introdu o valoare valida.")
-
-def remove_element_on_index(lista:list[dict[str, int]], index:int)->list[dict[str, int]]:
-    """
-    elimina un element din lista la o pozitie data
-    :param lista: lista de unde dorim sa stergem elementul
-    :param index: indexul unde dorim sa stergem elementul
-    :return: lista modificata (cu elementul sters)
-    """
-    lista_temp = lista[:]
-    lista_temp.pop(index)
-    return lista_temp
-
-
-def test_remove_element_on_index():
-    """
-    Testează funcționalitatea corectă a funcției remove_element_on_index.
-    """
-    l1 = [create_dict_complex_number(1, 2), create_dict_complex_number(3, 4)]
-    expected = [create_dict_complex_number(3, 4)]
-    assert remove_element_on_index(l1, 0) == expected
-
-    l2 = [create_dict_complex_number(1, 2), create_dict_complex_number(3, 4), create_dict_complex_number(5, 6)]
-    expected = [create_dict_complex_number(1, 2), create_dict_complex_number(5, 6)]
-    assert remove_element_on_index(l2, 1) == expected
-
-    l3 = [create_dict_complex_number(1, 2), create_dict_complex_number(3, 4), create_dict_complex_number(5, 6)]
-    expected = [create_dict_complex_number(1, 2), create_dict_complex_number(3, 4)]
-    assert remove_element_on_index(l3, 2) == expected
-
-
-
-def remove_elements_subsequence(lista:list[dict[str, int]], index_start:int, index_end:int)->list[dict[str, int]]:
-    """
-    Permite eliminarea unei subsecvente din lista intre 2 indici
-    :param lista: lista din care dorim sa eliminam o subsecventa
-    :param index_start: indexul de start de unde incepe stergerea
-    :param index_end: indexul unde dorim sa oprim stergerea
-    :return: lista cu subsecventa eliminata
-    """
-    lista = lista[:index_start] + lista[index_end + 1:]
-    return lista
-
-def test_remove_elements_subsequence():
-    """
-    Testează funcționalitatea corectă a funcției remove_elements_subsequence.
-    """
-    l1 = [create_dict_complex_number(1, 2), create_dict_complex_number(2, 3)]
-    expected = []
-    assert remove_elements_subsequence(l1, 0, 1) == expected
-
-    l2 = [create_dict_complex_number(1, 2), create_dict_complex_number(2, 3), create_dict_complex_number(4, 5)]
-    expected = [create_dict_complex_number(4, 5)]
-    assert remove_elements_subsequence(l2, 0, 1) == expected
-
-    l3 = []
-    expected = []
-    assert remove_elements_subsequence(l3, 10, 11) == expected
-
-
-
-def replace_complex_value_with_another_one(lista:list[dict[str, int]], to_be_replaced:dict[str, int], to_replace:dict[str, int])->list[dict[str, int]]:
-    """
-    permite inlocuirea tuturor prezentelor unui numar complex cu un altul
-    :param lista: lista in care dorim sa inlocuim valoarea unui numar complex
-    :param to_be_replaced: valoarea care trebuie inlocuita
-    :param to_replace: valoarea cu care se inlocuieste
-    :return: lista modificata
-    """
-    lista_temp = lista[:]
-    for i in range(len(lista)):
-        if lista_temp[i] == to_be_replaced:
-            lista_temp[i] = to_replace
-    return lista_temp
-
-def test_replace_complex_value_with_another_one():
-    """
-    Testează funcționalitatea corectă a funcției replace_complex_value_with_another_one.
-    """
-    l1 = [create_dict_complex_number(1, 2), create_dict_complex_number(3, 4)]
-    expected = [create_dict_complex_number(10, 11), create_dict_complex_number(3, 4)]
-    assert replace_complex_value_with_another_one(
-        l1,
-        create_dict_complex_number(1, 2),
-        create_dict_complex_number(10, 11)
-    ) == expected
-
-    l2 = [
-        create_dict_complex_number(1, 2),
-        create_dict_complex_number(3, 4),
-        create_dict_complex_number(5, 6),
-        create_dict_complex_number(5, 6),
-        create_dict_complex_number(5, 6)
-    ]
-    expected = [
-        create_dict_complex_number(1, 2),
-        create_dict_complex_number(3, 4),
-        create_dict_complex_number(1, 4),
-        create_dict_complex_number(1, 4),
-        create_dict_complex_number(1, 4)
-    ]
-    assert replace_complex_value_with_another_one(
-        l2,
-        create_dict_complex_number(5, 6),
-        create_dict_complex_number(1, 4)
-    ) == expected
-
-    l3 = []
-    expected = []
-    assert replace_complex_value_with_another_one(
-        l3,
-        create_dict_complex_number(5, 6),
-        create_dict_complex_number(1, 4)
-    ) == expected
-
-
-
-#---------------------LAB 4
-#search numbers - option 3
-
-def print_imaginary_side(lista:list[dict[str, int]], indexes_print:list[int]):
-    """
-    Afiseaza partea imaginara a numerelor cuprinse intre 2 pozitii
-    :param lista: lista din care dorim sa afisam elementele; de tipul: [[1, 2], [3, 4]]
-    :param indexes_print: o lista de 2 elemente care contine pe pozitia 0 indexul de start iar pe pozitia 1 ultimul index; de tipul: [1, 2]
-    :return: no return
-    """
-    for i in range(indexes_print[0], indexes_print[1] + 1):
-        print(get_imaginary_part_complex_element(lista[i]), end = " ")
-    print()
-
-def get_all_imaginary_numbers_where_abs_value_less_than_10(lista:list[dict[str, int]])->list[dict[str, int]]:
-    """
-    Gaseste o sublista care contine toate elementele dintr-o lista de numere complexe care au valoarea absoluta mai mica decat 10
-    :param lista: lista de unde dorim a extrage valorile cu modulul mai mic decat 10; de tipul: [[1, 2], [3, 4]]
-    :return: sublista care contine elementele care satisfac cerinta
-    """
-    return_value = []
-    for i in lista:
-        if math.sqrt(get_real_part_complex_element(i) ** 2 + get_imaginary_part_complex_element(i) ** 2) < 10:
-            return_value.append(i)
-    return return_value
-
-def test_get_all_imaginary_numbers_where_abs_value_less_than_10():
-    """
-    Testează funcționalitatea corectă a funcției
-    get_all_imaginary_numbers_where_abs_value_less_than_10.
-    """
-    l1 = [create_dict_complex_number(1, 2), create_dict_complex_number(6, 7)]
-    expected = [create_dict_complex_number(1, 2), create_dict_complex_number(6, 7)]
-    assert get_all_imaginary_numbers_where_abs_value_less_than_10(l1) == expected
-
-    l2 = [create_dict_complex_number(1, 2), create_dict_complex_number(100, 101)]
-    expected = [create_dict_complex_number(1, 2)]
-    assert get_all_imaginary_numbers_where_abs_value_less_than_10(l2) == expected
-
-    l3 = []
-    expected = []
-    assert get_all_imaginary_numbers_where_abs_value_less_than_10(l3) == expected
-
-
-def get_all_imaginary_numbers_where_abs_value_equals_10(lista:list[dict[str, int]])->list[dict[str, int]]:
-    """
-    Gaseste o sublista dintr-o lista de numere complexe oferita, unde toate elementele au valoarea absoluta egala cu 10; de tipul: [[1, 2], [3, 4]]
-    :param lista: lista unde dorim sa gasim sublista care are toate elementele cu proprietatea ca valoarea lor absoluta este 10; de tipul: [[1, 2], [3, 4]]
-    :return: sublista construita cu proprietatea precizata
-    """
-    return_value = []
-    for i in lista:
-        if math.sqrt(get_real_part_complex_element(i) ** 2 + get_imaginary_part_complex_element(i) ** 2) == 10:
-            return_value.append(i)
-    return return_value
-
-def test_get_all_imaginary_numbers_where_abs_value_equals_10():
-    """
-    Testează funcționalitatea corectă a funcției
-    get_all_imaginary_numbers_where_abs_value_equals_10.
-    """
-    l1 = [create_dict_complex_number(1, 2), create_dict_complex_number(6, 8)]
-    expected = [create_dict_complex_number(6, 8)]
-    assert get_all_imaginary_numbers_where_abs_value_equals_10(l1) == expected
-
-    l2 = [create_dict_complex_number(1, 2), create_dict_complex_number(100, 101)]
-    expected = []
-    assert get_all_imaginary_numbers_where_abs_value_equals_10(l2) == expected
-
-    l3 = []
-    expected = []
-    assert get_all_imaginary_numbers_where_abs_value_equals_10(l3) == expected
-
-
-
-def print_all_imaginary_numbers_where_abs_value_equals_10(lista:list[dict[str, int]]):
-    """
-    Afiseaza sublista dintr-o lista de numere complexe unde toate elementele au valoarea absoluta egala cu 10
-    :param lista: lista unde dorim sa gasim o sublista care sa satisfaca conditia ca toate elementele sa aiba valoarea absoluta egala cu 10 si sa afiseze sublista construita; de tipul: [[1, 2], [3, 4]]
-    :return: no return
-    """
-    print_list_imaginary_number(get_all_imaginary_numbers_where_abs_value_equals_10(lista))
-
-def print_all_imaginary_numbers_where_abs_value_less_than_10(lista:list[dict[str, int]]):
-    """
-    Afiseaza sublista dintr-o lista de numere complexe unde toate elementele au valoarea absoluta mai mica decat 10
-    :param lista: lista unde dorim sa gasim o sublista care sa satisfaca conditia ca toate elementele sa aiba valoarea absoluta mai mica decat 10 si sa afiseze sublista construita; de tipul: [[1, 2], [3, 4]]
-    :return: no return
-    """
-    print_list_imaginary_number(get_all_imaginary_numbers_where_abs_value_less_than_10(lista))
-
-#operations with numbers in the list - option 4
-
-def subsequence_sum(lista:list[dict[str, int]], start:int, end:int)->list[int]:
-    """
-    Calculeaza suma unei subsecvente de numere complexe dintr-o lista
-    :param lista: lista unde dorim sa calculam suma; de tipul: [[1, 2], [3, 4]]
-    :param start: indexul de unde dorim sa incepem sa calculam suma
-    :param end: indexul unde dorim sa incetam sa calculam suma
-    :return: lista de 2 elemente care contine suma elementelor reale pe indexul 0, iar pe indexul 1 suma numerelor imaginare
-    """
-    suma = [0, 0]
-    end = min(end+1, len(lista))
-    for i in range(start, end):
-        suma[0] += get_real_part_complex_element(lista[i])
-        suma[1] += get_imaginary_part_complex_element(lista[i])
-    return suma
-
-def test_subsequence_sum():
-    """
-    Testează funcționalitatea corectă a funcției subsequence_sum.
-    """
-    l1 = [
-        create_dict_complex_number(1, 2),
-        create_dict_complex_number(3, 4),
-        create_dict_complex_number(5, 6),
-    ]
-    assert subsequence_sum(l1, 0, 2) == [9, 12]
-
-    l2 = [
-        create_dict_complex_number(4, 5),
-        create_dict_complex_number(6, 7),
-    ]
-    assert subsequence_sum(l2, 0, 0) == [4, 5]
-
-    l3 = []
-    assert subsequence_sum(l3, 0, 100) == [0, 0]
-
-def subsequence_product(lista: list[dict[str, int]], start: int, end: int) -> dict[str, int]:
-    """
-    Calculează produsul unei subsecvente de numere complexe dintr-o listă
-    """
-    product = create_dict_complex_number(1, 0)  # start with 1 + 0i
-    end = min(end + 1, len(lista))
-    for i in range(start, end):
-        a, b = get_real_part_complex_element(product), get_imaginary_part_complex_element(product)
-        c, d = get_real_part_complex_element(lista[i]), get_imaginary_part_complex_element(lista[i])
-        set_real_part_complex_element(product, a * c - b * d)
-        set_imag_part_complex_element(product, a * d + b * c)
-    return product
-
-def test_subsequence_product():
-    """
-    Testează funcționalitatea corectă a funcției subsequence_product.
-    """
-    l1 = [create_dict_complex_number(2, 3)]
-    assert subsequence_product(l1, 0, 0) == create_dict_complex_number(2, 3)
-
-    l2 = [
-        create_dict_complex_number(2, 3),
-        create_dict_complex_number(1, 1),
-    ]
-    assert subsequence_product(l2, 0, 1) == create_dict_complex_number(-1, 5)
-
-    l3 = [
-        create_dict_complex_number(1, 1),
-        create_dict_complex_number(2, 0),
-        create_dict_complex_number(0, 1),
-    ]
-    assert subsequence_product(l3, 0, 2) == create_dict_complex_number(-2, 2)
-
-
-
-def get_sorted_list_by_imaginary_part(lista:list[dict[str, int]])->list[dict[str, int]]:
-    """
-    Ordoneaza descrescator o lista de numere complexe dupa partea imaginara
-    :param lista: lista pe care dorim sa o ordonam; de tipul: [[1, 2], [3, 4]]
-    :return: lista ce contine elementele ordonate
-    """
-    def sorting_criteria(item:dict[str, int]):
-        return get_imaginary_part_complex_element(item)
-    sorted_list = lista[:]
-    sorted_list.sort(reverse=True, key = sorting_criteria)
-    return sorted_list
-
-def test_get_sorted_list_by_imaginary_part():
-    """
-    Testează funcționalitatea corectă a funcției get_sorted_list_by_imaginary_part.
-    """
-    l1 = [
-        create_dict_complex_number(1, 2),
-        create_dict_complex_number(3, 4),
-        create_dict_complex_number(1, 1)
-    ]
-    assert get_sorted_list_by_imaginary_part(l1) == [
-        create_dict_complex_number(3, 4),
-        create_dict_complex_number(1, 2),
-        create_dict_complex_number(1, 1)
-    ]
-
-    l2 = [
-        create_dict_complex_number(1, 1),
-        create_dict_complex_number(2, 2),
-        create_dict_complex_number(3, 3)
-    ]
-    assert get_sorted_list_by_imaginary_part(l2) == [
-        create_dict_complex_number(3, 3),
-        create_dict_complex_number(2, 2),
-        create_dict_complex_number(1, 1)
-    ]
-
-    assert get_sorted_list_by_imaginary_part([]) == []
-
-
-#filtering - option 5
-def remove_prime_real_part(lista:list[dict[str, int]])->list[dict[str, int]]:
-    """
-    Elimina numerele complexe care au partea reala numar prim dintr-o lista
-    :param lista: lista de unde dorim sa eliminam numerele; de tipul: [[1, 2], [3, 4]]
-    :return: lista rezultata dupa eliminarea elementelor care au partea reala numar prim
-    """
-    temp = []
-    for i in range(len(lista)):
-        if not prime_number(get_real_part_complex_element(lista[i])):
-            temp.append(lista[i])
-    return temp
-
-def test_remove_prime_real_part():
-    """
-    Testează funcționalitatea corectă a funcției remove_prime_real_part.
-    """
-    l1 = [
-        create_dict_complex_number(1, 2),
-        create_dict_complex_number(3, 4),
-        create_dict_complex_number(4, 5)
-    ]
-    assert remove_prime_real_part(l1) == [
-        create_dict_complex_number(1, 2),
-        create_dict_complex_number(4, 5)
-    ]
-
-    l2 = [
-        create_dict_complex_number(4, 5),
-        create_dict_complex_number(6, 7),
-        create_dict_complex_number(8, 9)
-    ]
-    assert remove_prime_real_part(l2) == [
-        create_dict_complex_number(4, 5),
-        create_dict_complex_number(6, 7),
-        create_dict_complex_number(8, 9)
-    ]
-
-    assert remove_prime_real_part([]) == []
-
-def remove_elements_where_abs_value_doesnt_satisfy_request(lista:list[dict[str, int]], option:int, number:int)->list[dict[str, int]]:
-    """
-    Elimina numerele dintr-o lista ale caror valori absolute nu indeplinesc o conditie introdusa:
-        1. sunt mai mici decat un numar
-        2. sunt egale cu un numar
-        3. sunt mai mari decat un numar
-    :param lista: lista unde dorim sa eliminam elemente; de tipul: [[1, 2], [3, 4]]
-    :param option: optiunea pe care o alegem pentru a filtra numerele
-    :param number: numarul la care ne raportam pentru conditia introdusa
-    :return: o sublista din ce initiala unde au fost filtrate elementele care nu satisfac conditia
-    """
-    return_list = []
-    for i in lista:
-        absolute_value = math.sqrt(get_real_part_complex_element(i) ** 2 + get_imaginary_part_complex_element(i) ** 2)
-        if option == 1 and absolute_value >= number:
-            return_list.append(i)
-        elif option == 2 and absolute_value != number:
-            return_list.append(i)
-        elif option == 3 and absolute_value <= number:
-            return_list.append(i)
-    return return_list
-
-def test_remove_elements_where_abs_value_doesnt_satisfy_request():
-    """
-    Testează funcționalitatea corectă a funcției remove_elements_where_abs_value_doesnt_satisfy_request.
-    """
-    data = [
-        create_dict_complex_number(3, 4),
-        create_dict_complex_number(1, 2),
-        create_dict_complex_number(0, 0),
-        create_dict_complex_number(5, 12)
-    ]
-
-    assert remove_elements_where_abs_value_doesnt_satisfy_request(data, 1, 5) == [
-        create_dict_complex_number(5, 12)
-    ]
-    assert remove_elements_where_abs_value_doesnt_satisfy_request(data, 2, 5) == [
-        create_dict_complex_number(1, 2),
-        create_dict_complex_number(0, 0)
-    ]
-    assert remove_elements_where_abs_value_doesnt_satisfy_request(data, 3, 5) == [
-        create_dict_complex_number(3, 4)
-    ]
-    assert remove_elements_where_abs_value_doesnt_satisfy_request([], 1, 5) == []
-    assert remove_elements_where_abs_value_doesnt_satisfy_request(
-        [create_dict_complex_number(3, 4)], 3, 6
-    ) == []
-
-def test_function():
-    """
-    ruleaza toate testele prezente in program pentru a se asigura ca functionalitatile sunt corecte
-    :return: no return
-    """
-    test_get_all_imaginary_numbers_where_abs_value_equals_10()
-    test_get_all_imaginary_numbers_where_abs_value_less_than_10()
-    test_prime_number()
-    test_get_sorted_list_by_imaginary_part()
-    test_subsequence_product()
-    test_subsequence_sum()
-    test_remove_prime_real_part()
-    test_remove_elements_where_abs_value_doesnt_satisfy_request()
-    test_replace_complex_value_with_another_one()
-    test_remove_elements_subsequence()
-    test_add_number_complex_to_list()
-    test_remove_element_on_index()
-    test_replace_complex_value_with_another_one()
-
-
-#menu
-def menu_interact(maximum_option:int)->int:
-    """
-    Citeste optiunea pe care doresti sa o urmezi in program
-    :return: optiunea introdusa, sub forma de numar (int)
-    """
-    while True:
-        try:
-            menu_option = int(input("Introdu o optiune din meniu pe care vrei sa o urmezi: \n"))
-            if menu_option < 0 or menu_option > maximum_option:
-                raise ValueError
-            return menu_option
-        except ValueError:
-            print("Introdu o valoare valida")
-
-def print_menu_option_1():
-    """Afișează opțiunile pentru adăugarea numerelor complexe în listă.
-    :return: no return"""
-    print("1. ADAUGA NUMAR COMPLEX LA SFARSITUL LISTEI")
-    print("2. INSERARE NUMAR COMPLEX PE O POZITIE DATA")
-
-
-def print_menu_option_2():
-    """Afișează opțiunile pentru modificarea elementelor din listă.
-    :return: no return"""
-    print("1. STERGE ELEMENT DE PE O POZITIE DATA")
-    print("2. STERGE ELEMENTELE DE PE UN INTERVAL DE POZITII")
-    print("3. INLOCUIESTE TOATE APARITIILE UNUI NUMAR COMPLEX CU UN ALT NUMAR COMPLEX")
-
-
-def print_menu_option_3():
-    """Afișează opțiunile pentru afișarea și filtrarea numerelor complexe.
-    :return: no return"""
-    print("1. TIPARESTE PARTEA IMAGINARA PENTRU NUMERELE DIN LISTA (se da un interval de pozitii)")
-    print("2. TIPARESTE TOATE NUMERELE COMPLEXE CARE AU MODULUL MAI MIC DECAT 10")
-    print("3. TIPARESTE TOATE NUMERELE COMPLEXE CARE AU MODULUL EGAL CU 10")
-
-
-def print_menu_option_4():
-    """Afișează opțiunile pentru efectuarea operațiilor matematice asupra listei.
-    :return: no return"""
-    print("1. SUMA NUMERELOR INTRE 2 INDICI")
-    print("2. PRODUSUL NUMERELOR INTRE 2 INDICI")
-    print("3. TIPARESTE LISTA SORTATA DESCRESCATOR DUPA PARTEA IMAGINARA")
-
-
-def print_menu_option_5():
-    """Afișează opțiunile pentru filtrarea numerelor complexe.
-    :return: no return"""
-    print("1. ELIMINA DIN LISTA NUMERELE COMPLEXE LA CARE PARTEA REALA ESTE NUMAR PRIM")
-    print("2. ELIMINA DIN LISTA NUMERELE COMPLEXE LA CARE MODULUL ESTE <, =, > DECAT UN NUMAR DAT")
-
-
-def print_submenu_option_5():
-    """Afișează submeniul pentru condițiile de filtrare (<, =, >).
-    :return: no return"""
-    print("1. <")
-    print("2. =")
-    print("3. >")
-
-
-def print_main_menu():
-    """Afișează meniul principal al aplicației.
-    :return: no return"""
-    print("0. IESIRE (poate fi introdus oricand pentru a opri programul)")
-    print("1. ADAUGA NUMAR IN LISTA")
-    print("2. MODIFICA ELEMENTE DIN LISTA")
-    print("3. CAUTARE NUMERE")
-    print("4. OPERATII CU NUMERELE DIN LISTA")
-    print("5. FILTRARE")
-    print("6. UNDO")
+from tests import test_function
+from view import *
 
 
 def middleware_functions_list(has_elements: bool) -> bool:
@@ -774,7 +105,7 @@ def middleware_functions_list(has_elements: bool) -> bool:
         return False
     return True
 
-def check_list_length(lista:list[dict[int]]) -> bool:
+def check_list_length(lista:list[dict[str, int]]) -> bool:
     """
     Verifica daca o lista este goala sau nu
     :param lista: lista unde dorim sa verificam daca este goala sau nu
@@ -786,8 +117,10 @@ def check_list_length(lista:list[dict[int]]) -> bool:
 
 def main():
     elemente_citite = False
+    list_history = []
     list_main = []
     while True:
+        add_to_list_history(list_history, list_main)
         print_main_menu()
         menu_option = menu_interact(6)
         elemente_citite = check_list_length(list_main)
@@ -802,13 +135,17 @@ def main():
                 number = read_complex_number()
                 list_main = add_number_complex_to_list(list_main, -1, number)
                 new_list_message()
-                print_list_imaginary_number(list_main)
+                print_list_complex_number(list_main)
             elif option == 2:
                 number = read_complex_number()
                 index = read_index_to_add(list_main)
                 list_main = add_number_complex_to_list(list_main, index, number)
                 new_list_message()
-                print_list_imaginary_number(list_main)
+                print_list_complex_number(list_main)
+        elif menu_option == 6:
+            list_main = get_list_before_last_change(list_history)
+            new_list_message()
+            print_list_complex_number(list_main)
         elif middleware_functions_list(elemente_citite):
             if menu_option == 2:
                 print_menu_option_2()
@@ -819,12 +156,12 @@ def main():
                     index_to_remove = read_index_to_remove_item(list_main)
                     list_main = remove_element_on_index(list_main, index_to_remove)
                     new_list_message()
-                    print_list_imaginary_number(list_main)
+                    print_list_complex_number(list_main)
                 elif option == 2:
                     indexes_to_remove = read_2_indexes_start_end(list_main)
                     list_main = remove_elements_subsequence(list_main, indexes_to_remove[0], indexes_to_remove[1])
                     new_list_message()
-                    print_list_imaginary_number(list_main)
+                    print_list_complex_number(list_main)
                 elif option == 3:
                     print("Introdu numarul pe care doresti sa il inlocuiesti")
                     complex_number_to_be_replaced = read_complex_number()
@@ -832,7 +169,7 @@ def main():
                     complex_number_to_replace = read_complex_number()
                     list_main = replace_complex_value_with_another_one(list_main, complex_number_to_be_replaced, complex_number_to_replace)
                     new_list_message()
-                    print_list_imaginary_number(list_main)
+                    print_list_complex_number(list_main)
             elif menu_option == 3:
                 print_menu_option_3()
                 option = menu_interact(3)
@@ -863,7 +200,7 @@ def main():
                     print(f"produsul este: {product[0]} {product[1]}i")
                 elif option == 3:
                     new_list_message()
-                    print_list_imaginary_number(get_sorted_list_by_imaginary_part(list_main))
+                    print_list_complex_number(get_sorted_list_by_imaginary_part(list_main))
             elif menu_option == 5:
                 print_menu_option_5()
                 option = menu_interact(2)
@@ -872,7 +209,7 @@ def main():
                 elif option == 1:
                     list_main = remove_prime_real_part(list_main)[:]
                     new_list_message()
-                    print_list_imaginary_number(list_main)
+                    print_list_complex_number(list_main)
                 elif option == 2:
                     print_submenu_option_5()
                     submenu = menu_interact(3)
@@ -880,14 +217,11 @@ def main():
                     number = read_whole_number()
                     list_main = remove_elements_where_abs_value_doesnt_satisfy_request(list_main, submenu, number)[:]
                     new_list_message()
-                    print_list_imaginary_number(list_main)
+                    print_list_complex_number(list_main)
+
+
 
     print("bye bye")
 
-"""
-make the functionality 6
-"""
 test_function()
 main()
-
-#modify all the functionality to be with getters, setters, create
