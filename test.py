@@ -28,3 +28,6 @@ test1 = Test(1000)
 print(Test.get_number_of_calls())
 
 print(test)
+
+
+#create_list 1 2 1 1 -> [(1, 2i), (1, 1i)]

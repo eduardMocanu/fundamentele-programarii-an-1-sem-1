@@ -60,10 +60,11 @@ def replace_complex_value_with_another_one(lista:list[dict[str, int]], to_be_rep
     :param to_replace: valoarea cu care se inlocuieste
     :return: lista modificata
     """
-    lista_temp = lista[:]
+    lista_temp = lista
     for i in range(len(lista)):
         if lista_temp[i] == to_be_replaced:
-            lista_temp[i] = to_replace
+            set_imag_part_complex_element(lista_temp[i], to_replace["imag"])
+            set_real_part_complex_element(lista_temp[i], to_replace["real"])
     return lista_temp
 
 def get_all_imaginary_numbers_where_abs_value_less_than_10(lista:list[dict[str, int]])->list[dict[str, int]]:
@@ -184,6 +185,7 @@ def add_to_list_history(history_list:list[list[dict[str, int]]], lista:list[dict
     :return: no return
     """
     if len(history_list) >= 1 and lista != history_list[-1]:
-        history_list.append(lista.copy())
+        history_list.append([i.copy() for i in lista])
     elif len(history_list) == 0:
         history_list.append(lista.copy())
+    return history_list #pentru teste

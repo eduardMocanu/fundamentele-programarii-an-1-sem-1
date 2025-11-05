@@ -220,8 +220,65 @@ def main():
                     print_list_complex_number(list_main)
 
 
+def main_comenzi():
+    list_history = []
+    list_main = []
+    command = ""
+    while True:
+        add_to_list_history(list_history, list_main)
+        command_input = input("Introdu comanda: ").strip().lower()
+        command_splitted = command_input.split(" ")
+        command = command_splitted[0]
+        if command == "help":
+            print_help_menu()
+        elif command == "append_element_to_list":
+            if len(command_splitted) != 3:
+                paramenters_problem()
+            else:
+                real_part = command_splitted[1]
+                imaginary_part = command_splitted[2]
+                list_main = add_number_complex_to_list(list_main, -1, create_complex_number(int(real_part), int(imaginary_part)))
+                new_list_message()
+                print_list_complex_number(list_main)
+        elif command == "add_element_on_index_to_list":
+            if len(command_splitted) != 4:
+                paramenters_problem()
+            else:
+                real_part = command_splitted[1]
+                imaginary_part = command_splitted[2]
+                index = command_splitted[3]
+                list_main = add_number_complex_to_list(list_main, int(index), create_complex_number(int(real_part), int(imaginary_part)))
+                new_list_message()
+                print_list_complex_number(list_main)
+        elif command == "remove_element_on_index":
+            if len(command_splitted) != 2:
+                paramenters_problem()
+            else:
+                index = command_splitted[1]
+                list_main = remove_element_on_index(list_main, int(index))
+                new_list_message()
+                print_list_complex_number(list_main)
+        elif command == "remove_elements_on_interval":
+            if len(command_splitted) != 3:
+                paramenters_problem()
+            else:
+                index_start = command_splitted[1]
+                index_stop = command_splitted[2]
+                list_main = remove_elements_subsequence(list_main, int(index_start), int(index_stop))
+                new_list_message()
+                print_list_complex_number(list_main)
+        elif command == "replace_all_instances_of_a_number":
+            if len(command_splitted) != 5:
+                paramenters_problem()
+            else:
+                to_replace = create_complex_number(int(command_splitted[1]), int(command_splitted[2]))
+                to_be_replaced = create_complex_number(int(command_splitted[3]), int(command_splitted[4]))
+                list_main = replace_complex_value_with_another_one(list_main, to_be_replaced, to_replace)
+                new_list_message()
+                print_list_complex_number(list_main)
 
     print("bye bye")
 
 test_function()
 main()
+#main_comenzi()

@@ -198,3 +198,9 @@ def print_main_menu():
     print("4. OPERATII CU NUMERELE DIN LISTA")
     print("5. FILTRARE")
     print("6. UNDO")
+
+def print_help_menu():
+    print("")
+
+def paramenters_problem():
+    print("Numar nepotrivit de parametrii")

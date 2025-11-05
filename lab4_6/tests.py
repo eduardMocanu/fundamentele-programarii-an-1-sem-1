@@ -260,6 +260,26 @@ def test_remove_elements_where_abs_value_doesnt_satisfy_request():
         [create_complex_number(3, 4)], 3, 6
     ) == [create_complex_number(3, 4)]
 
+def test_get_list_before_last_change():
+    """
+    Testeaza functionalitatea corecta a functiei get_list_before_last_change
+    :return:
+    """
+    assert get_list_before_last_change([[], [create_complex_number(1, 2), create_complex_number(3, 4)]]) == []
+    assert get_list_before_last_change([[]]) == []
+
+
+def test_add_to_list_history():
+    """
+    Testeaza functionalitatea corecta a functiei add_to_list_history
+    """
+    assert add_to_list_history([[]], [create_complex_number(1, 2)]) == [[], [create_complex_number(1, 2)]]
+    assert add_to_list_history([[], [create_complex_number(1, 2), create_complex_number(3, 4)]], [create_complex_number(1, 2), create_complex_number(3, 4)]) == [[], [create_complex_number(1, 2), create_complex_number(3, 4)]]
+
+
+
+
+
 def test_function():
     """
     ruleaza toate testele prezente in program pentru a se asigura ca functionalitatile sunt corecte
@@ -278,4 +298,6 @@ def test_function():
     test_add_number_complex_to_list()
     test_remove_element_on_index()
     test_replace_complex_value_with_another_one()
+    test_get_list_before_last_change()
+    test_add_to_list_history()
 
