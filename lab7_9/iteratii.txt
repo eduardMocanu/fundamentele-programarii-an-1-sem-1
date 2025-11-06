@@ -1,0 +1,5 @@
+iteratia 1 (lab 7) - modelele pentru Client + Film; repos pentru films + clients; services pentru films + clients
+iteratia 2 - controllers + UI + Validators
+iteratia 3 - teste + documentatie
+
+teste pana si pentru services + repos?
