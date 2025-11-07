@@ -1,9 +1,13 @@
 class Film:
 
-    def __init__(self, titlu, descriere, gen):
+    def __init__(self, film_id, titlu, descriere, gen):
+        self.__id = film_id
         self.__titlu = titlu
         self.__descriere = descriere
         self.__gen = gen
+
+    def get_id(self):
+        return self.__id
 
     def get_titlu(self):
         return self.__titlu
@@ -22,3 +26,6 @@ class Film:
 
     def set_gen(self, gen):
         self.__gen = gen
+
+    def set_id(self, film_id):
+        self.__id = film_id
