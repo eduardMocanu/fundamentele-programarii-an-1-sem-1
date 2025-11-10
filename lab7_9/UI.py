@@ -1,0 +1,92 @@
+from lab7_9.errors.RepoError import RepoError
+from lab7_9.errors.ServiceError import ServiceError
+from lab7_9.errors.UIerror import UiError
+
+
+class UI:
+
+    def __init__(self, client_service, film_service, lending_service):
+        self.__client_service = client_service
+        self.__film_service = film_service
+        self.__lending_service = lending_service
+        self.__comenzi = {
+            "help": self.help_menu,
+            "add_client": self.adauga_client,
+            "remove_client": self.sterge_client,
+            "modify_client": self.modify_client
+        }
+
+    def run(self):
+        print("Introdu help pentru a vedea toate comenzile")
+        while True:
+            whole_command = input("Introdu comanda: ").strip()
+            splitted_command = whole_command.split(" ")
+            command = splitted_command[0]
+            if command in self.__comenzi:
+                self.__comenzi[command]()
+            elif command == "exit":
+                break
+            else:
+                print("Comanda invalida, introdu help pentru a vedea toate comenzile")
+            print()
+        print("bye")
+
+
+    def adauga_client(self):
+        try:
+            id_client = int(input("Introdu id-ul clientului: "));
+        except ValueError:
+            print("id invalid")
+            return
+        nume_client = input("Introdu numele clientului: ")
+        CNP_client = input("Introdu CNP-ul clientului: ")
+        try:
+            self.__client_service.add_client(id_client, nume_client, CNP_client)
+        except UiError as e:
+            print(e)
+        except ServiceError as e:
+            print(e)
+        except RepoError as e:
+            print(e)
+
+    def sterge_client(self):
+        try:
+            id_client = int(input("Introdu id-ul clientului care doresti sa fie sters: "))
+        except ValueError:
+            print("id invalid")
+            return
+        try:
+            self.__client_service.remove_client_by_id(id_client)
+        except UiError as e:
+            print(e)
+        except ServiceError as e:
+            print(e)
+        except RepoError as e:
+            print(e)
+
+    def modify_client(self):
+        try:
+            id_client_old = int(input("Introdu id-ul vechii inregistrari: "))
+        except ValueError:
+            print("Id vechi invalid")
+            return
+        try:
+            id_client_new = int(input("Introdu noul id al clientului: "))
+        except ValueError:
+            print("Id nou invalid")
+            return
+        nume_client_new = input("Introdu noul nume al clientului: ")
+        CNP_client_new = input("Introdu noul CNP al clientului: ")
+        try:
+            self.__client_service.modify_client(id_client_old, id_client_new, nume_client_new, CNP_client_new)
+        except UiError as e:
+            print(e)
+        except ServiceError as e:
+            print(e)
+        except RepoError as e:
+            print(e)
+
+    def help_menu(self):
+        print("Adauga client: add_client")
+        print("Sterge client: remove_client")
+        print("Modifica client: modify_client")

@@ -1,6 +1,6 @@
 from lab7_9.Validators import Validators
 from lab7_9.model.Client import Client
-from lab7_9.service.clients_service import Clients_service
+from lab7_9.service.clients_service import q
 
 
 class Clients_controller:
