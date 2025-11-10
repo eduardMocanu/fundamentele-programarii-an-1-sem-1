@@ -4,8 +4,25 @@ from lab7_9.errors.UIerror import UiError
 
 
 class UI:
+    """
+    Interfață pentru utilizator (UI) care gestionează comenzile pentru clienți, filme și împrumuturi.
+
+    Funcționalități principale:
+    - rulează bucla principală de input pentru utilizator
+    - permite adăugarea, ștergerea și modificarea clienților
+    - afișează meniul de ajutor cu comenzile disponibile
+    - gestionează erorile și le afișează utilizatorului
+    """
 
     def __init__(self, client_service, film_service, lending_service):
+        """
+        Inițializează UI-ul cu serviciile corespunzătoare.
+
+        Parametri:
+        - client_service: serviciul pentru operațiuni cu clienți
+        - film_service: serviciul pentru operațiuni cu filme
+        - lending_service: serviciul pentru operațiuni cu împrumuturi
+        """
         self.__client_service = client_service
         self.__film_service = film_service
         self.__lending_service = lending_service
@@ -17,6 +34,16 @@ class UI:
         }
 
     def run(self):
+        """
+        Rulează bucla principală de input, așteptând comenzi de la utilizator.
+
+        Comenzile suportate sunt:
+        - add_client
+        - remove_client
+        - modify_client
+        - help
+        - exit
+        """
         print("Introdu help pentru a vedea toate comenzile")
         while True:
             whole_command = input("Introdu comanda: ").strip()
@@ -31,10 +58,16 @@ class UI:
             print()
         print("bye")
 
-
     def adauga_client(self):
+        """
+        Solicită datele unui client de la utilizator și îl adaugă folosind serviciul de clienți.
+
+        Gestionează erorile și le afișează utilizatorului:
+        - ValueError pentru ID invalid
+        - UiError, ServiceError, RepoError pentru probleme de validare sau repo
+        """
         try:
-            id_client = int(input("Introdu id-ul clientului: "));
+            id_client = int(input("Introdu id-ul clientului: "))
         except ValueError:
             print("id invalid")
             return
@@ -50,6 +83,13 @@ class UI:
             print(e)
 
     def sterge_client(self):
+        """
+        Solicită ID-ul unui client de la utilizator și îl șterge folosind serviciul de clienți.
+
+        Gestionează erorile și le afișează utilizatorului:
+        - ValueError pentru ID invalid
+        - UiError, ServiceError, RepoError pentru probleme de validare sau repo
+        """
         try:
             id_client = int(input("Introdu id-ul clientului care doresti sa fie sters: "))
         except ValueError:
@@ -65,6 +105,13 @@ class UI:
             print(e)
 
     def modify_client(self):
+        """
+        Solicită ID-ul vechi și noile date ale clientului și modifică înregistrarea existentă.
+
+        Gestionează erorile și le afișează utilizatorului:
+        - ValueError pentru ID invalid
+        - UiError, ServiceError, RepoError pentru probleme de validare sau repo
+        """
         try:
             id_client_old = int(input("Introdu id-ul vechii inregistrari: "))
         except ValueError:
@@ -87,6 +134,9 @@ class UI:
             print(e)
 
     def help_menu(self):
+        """
+        Afișează lista comenzilor disponibile pentru utilizator.
+        """
         print("Adauga client: add_client")
         print("Sterge client: remove_client")
         print("Modifica client: modify_client")

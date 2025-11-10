@@ -3,13 +3,37 @@ from lab7_9.model.Client import Client
 
 
 class ClientsRepo:
+    """
+    Repozitoriu pentru gestionarea obiectelor Client.
+
+    Functionalități principale:
+    - stochează clienți într-o listă internă privată
+    - adaugă clienți noi, verificând unicitatea ID-ului și CNP-ului
+    - șterge clienți existenți
+    - actualizează un client existent
+    - caută un client după ID
+    """
+
     def __init__(self):
+        """
+        Inițializează un repo gol de clienți.
+        """
         self.__clients = []
 
     def get_all(self):
+        """
+        Returnează o listă cu toți clienții existenți.
+        """
         return list(self.__clients)
 
     def add(self, client: Client):
+        """
+        Adaugă un client nou.
+
+        Verifică:
+        - dacă ID-ul clientului există deja -> RepoError
+        - dacă CNP-ul clientului există deja -> RepoError
+        """
         if self.find_by_id(client.get_id()) is not None:
             raise RepoError("Clientul cu acest ID deja exista")
         for i in self.__clients:
@@ -18,11 +42,23 @@ class ClientsRepo:
         self.__clients.append(client)
 
     def remove(self, client: Client):
+        """
+        Șterge un client existent.
+
+        Aruncă RepoError dacă clientul nu există.
+        """
         if self.find_by_id(client.get_id()) is None:
             raise RepoError("Acest client nu exista")
         self.__clients.remove(client)
 
     def update(self, client_old_id, client_new: Client):
+        """
+        Actualizează un client existent cu datele unui alt client.
+
+        Parametri:
+        - client_old_id: ID-ul clientului existent
+        - client_new: obiect Client cu noile valori
+        """
         for i in self.__clients:
             if i.get_id() == client_old_id:
                 i.set_id(client_new.get_id())
@@ -31,6 +67,13 @@ class ClientsRepo:
                 break
 
     def find_by_id(self, client_id: int):
+        """
+        Caută un client după ID.
+
+        Returnează:
+        - obiect Client dacă este găsit
+        - None dacă nu există
+        """
         for client in self.__clients:
             if client.get_id() == client_id:
                 return client
