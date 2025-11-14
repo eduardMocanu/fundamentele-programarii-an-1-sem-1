@@ -1,7 +1,7 @@
-from ..service.clients_service import Clients_service
-from ..errors.ServiceError import ServiceError
-from ..repository.clients_repo import ClientsRepo
-from ..validators.client_validator import Client_validator
+from lab7_9.service.clients_service import Clients_service
+from lab7_9.errors.ServiceError import ServiceError
+from lab7_9.repository.clients_repo import ClientsRepo
+from lab7_9.validators.client_validator import Client_validator
 
 
 def test_add_client():
@@ -19,7 +19,9 @@ def test_add_client():
 
     stored_clients = clients_service.get_clients()
     assert any(
-        c.id == 1 and c.name == "Test" and c.cnp == "1234567890123"
+        c.get_id() == 1
+        and c.get_nume() == "Test"
+        and c.get_CNP() == "1234567890123"
         for c in stored_clients
     ), "Client should be in the repository"
 
@@ -33,7 +35,7 @@ def test_remove_client_by_id():
 
     clients_service.remove_client_by_id(1)
     stored_clients = clients_service.get_clients()
-    assert all(c.id != 1 for c in stored_clients), "Client should be removed"
+    assert all(c.get_id() != 1 for c in stored_clients), "Client should be removed"
 
     try:
         clients_service.remove_client_by_id(999)
@@ -52,10 +54,13 @@ def test_modify_client():
     clients_service.modify_client(1, 1, "Modified", "9876543210987")
 
     stored_clients = clients_service.get_clients()
-    modified = next((c for c in stored_clients if c.id == 1), None)
+    modified = None
+    for i in stored_clients:
+        if i.get_id() == 1:
+            modified = i
     assert modified is not None, "Client should exist"
-    assert modified.name == "Modified"
-    assert modified.cnp == "9876543210987"
+    assert modified.get_nume() == "Modified"
+    assert modified.get_CNP() == "9876543210987"
 
     try:
         clients_service.modify_client(8, 999, "NoOne", "0000000000000")
@@ -72,9 +77,9 @@ def test_search_client_by_id():
     clients_service.add_client(1, "Test", "1234567890123")
 
     found_client = clients_service.search_client_by_id(1)
-    assert found_client.id == 1
-    assert found_client.name == "Test"
-    assert found_client.cnp == "1234567890123"
+    assert found_client.get_id() == 1
+    assert found_client.get_nume() == "Test"
+    assert found_client.get_CNP() == "1234567890123"
 
     try:
         clients_service.search_client_by_id(999)
@@ -94,9 +99,11 @@ def test_get_clients():
     clients_service.add_client(2, "Bob", "9876543210987")
 
     stored_clients = clients_service.get_clients()
-    assert any(c.id == 1 and c.name == "Alice" for c in stored_clients)
-    assert any(c.id == 2 and c.name == "Bob" for c in stored_clients)
+
+    assert any(c.get_id() == 1 and c.get_nume() == "Alice" for c in stored_clients)
+    assert any(c.get_id() == 2 and c.get_nume() == "Bob" for c in stored_clients)
     assert len(stored_clients) == 2
+
 
 def tests_service_clients():
     test_add_client()

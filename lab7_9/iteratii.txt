@@ -1,3 +1,3 @@
 iteratia 1 (lab 7) - modelele pentru Client + Film; repo Client; service/GRASPcontroller Client; UI - CRUDs client; teste; validators; docStrings clients
-iteratia 2 -
+iteratia 2 - repo Film + service FIlm + UI added for films + validators film + test + docstrings
 iteratia 3 -

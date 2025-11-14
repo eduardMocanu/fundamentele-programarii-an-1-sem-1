@@ -20,13 +20,13 @@ class ClientsRepo:
         """
         self.__clients = []
 
-    def get_all(self):
+    def get_all_clients(self):
         """
         Returnează o listă cu toți clienții existenți.
         """
         return list(self.__clients)
 
-    def add(self, client: Client):
+    def add_client(self, client: Client):
         """
         Adaugă un client nou.
 

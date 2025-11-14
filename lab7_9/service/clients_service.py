@@ -32,7 +32,7 @@ class Clients_service:
         """
         client = Client(client_id, client_name, client_CNP)
         self.__validator_client.verify_client(client)
-        self.__clients_repo.add(client)
+        self.__clients_repo.add_client(client)
 
     def remove_client_by_id(self, client_id: int):
         """
@@ -60,7 +60,7 @@ class Clients_service:
         self.__validator_client.verify_client(client_new)
         client_old = self.__clients_repo.find_by_id(client_id_old)
         self.__validator_client.verify_client(client_old)
-        self.__clients_repo.update(client_old, client_new)
+        self.__clients_repo.update(client_old.get_id(), client_new)
 
     def search_client_by_id(self, client_id: int):
         """
@@ -81,4 +81,4 @@ class Clients_service:
         """
         Returnează lista tuturor clienților existenți.
         """
-        return self.__clients_repo.get_all()
+        return self.__clients_repo.get_all_clients()
