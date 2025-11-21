@@ -22,3 +22,6 @@ class Client:
 
     def set_CNP(self, CNP):
         self.__CNP = CNP
+
+    def __repr__(self):
+        return f"Nume: {self.__nume}, Id: {self.__id}, CNP: {self.__CNP}"

@@ -1,3 +1,5 @@
+import random
+
 from lab7_9.service.clients_service import Clients_service
 from lab7_9.errors.ServiceError import ServiceError
 from lab7_9.repository.clients_repo import ClientsRepo
@@ -104,8 +106,25 @@ def test_get_clients():
     assert any(c.get_id() == 2 and c.get_nume() == "Bob" for c in stored_clients)
     assert len(stored_clients) == 2
 
+def test_random_clients():
+    clients_repo = ClientsRepo()
+    clients_validators = Client_validator()
+    clients_service = Clients_service(clients_repo, clients_validators)
+    random.seed(99)
+    clients_service.random_clients()
+
+    random.seed(99)
+    number_of_objects = random.randint(1, 10)
+    assert any(client.get_id() == 49907 for client in clients_repo.get_all_clients())
+    length = random.randint(1, 15)
+    assert length == 7
+
+
+
+
 
 def tests_service_clients():
+    test_random_clients()
     test_add_client()
     test_modify_client()
     test_remove_client_by_id()

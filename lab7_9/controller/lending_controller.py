@@ -1,5 +1,5 @@
 from lab7_9.Validators import Validators
-from lab7_9.service.lending_service import Lending_service
+from lab7_9.service.loans_service import Lending_service
 
 
 class Lending_controller:

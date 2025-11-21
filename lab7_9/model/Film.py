@@ -29,3 +29,6 @@ class Film:
 
     def set_id(self, film_id):
         self.__id = film_id
+
+    def __repr__(self):
+        return f"Titlu: {self.__titlu}, Descriere: {self.__descriere}, Gen: {self.__gen}"

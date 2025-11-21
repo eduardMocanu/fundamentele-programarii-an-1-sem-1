@@ -48,7 +48,11 @@ def test_modify_film():
     films_service.modify_film(1, 2, "New", "NewDesc", "NewGen")
 
     films = films_service.get_films()
-    modified = next((f for f in films if f.get_id() == 2), None)
+    modified = None
+    for f in films:
+        if f.get_id() == 2:
+            modified = f
+            break
 
     assert modified is not None, "Film should exist"
     assert modified.get_titlu() == "New"

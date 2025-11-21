@@ -1,6 +1,8 @@
+import string
+
 from lab7_9.repository.clients_repo import ClientsRepo
 from lab7_9.model.Client import Client
-
+import random
 
 class Clients_service:
     """
@@ -82,3 +84,24 @@ class Clients_service:
         Returnează lista tuturor clienților existenți.
         """
         return self.__clients_repo.get_all_clients()
+
+    def random_clients(self):
+         number_of_objects = random.randint(1, 10)
+         for i in range(number_of_objects):
+            id_random = self.random_id()
+            nume_random = self.random_name()
+            CNP_random = self.random_CNP()
+            self.add_client(id_random, nume_random, str(CNP_random))
+
+    def random_id(self):
+        return random.randint(1, 100000)
+
+    def random_name(self):
+        length = random.randint(1, 15)
+        nume = ""
+        for i in range(length):
+            nume += random.choice(string.ascii_letters)
+        return nume
+
+    def random_CNP(self):
+        return random.randint(1000000000000, 9999999999999)
