@@ -1,6 +1,6 @@
 import string
 
-from lab7_9.repository.clients_repo import ClientsRepo
+from lab7_9.repository.in_memory.clients_repo import ClientsRepo
 from lab7_9.model.Client import Client
 import random
 
@@ -89,7 +89,7 @@ class Clients_service:
          number_of_objects = random.randint(1, 10)
          for i in range(number_of_objects):
             id_random = self.random_id()
-            nume_random = self.random_name()
+            nume_random = self.random_name().lower()
             CNP_random = self.random_CNP()
             self.add_client(id_random, nume_random, str(CNP_random))
 

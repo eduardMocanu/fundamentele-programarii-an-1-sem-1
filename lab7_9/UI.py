@@ -43,7 +43,8 @@ class UI:
             "remove_loan": self.remove_loan,
             "clients_loaned_films_sorted": self.clients_loaned_films_sorted,
             "most_loaned_films": self.most_loaned_films,
-            "top_30_clients": self.top_30_clients
+            "top_30_clients": self.top_30_clients,
+            "top_x_merged": self.top_x_merged
 
         }
 
@@ -67,6 +68,7 @@ class UI:
         print("Clienti sortati dupa numarul de filme inchiriate: clients_loaned_films_sorted")
         print("Cele mai inchiriate filme: most_loaned_films")
         print("Top 30% al clientilor dupa numarul de filme inchiriate: top_30_clients")
+        print("Top x al intersectiei filmelor si clientilor: top_x_merged")
 
     def run(self):
         """
@@ -288,13 +290,13 @@ class UI:
         """
         Afișează toți clienții existenți în sistem.
         """
-        print(self.__client_service.get_clients())
+        print(self.__client_service.get_clients(), sep="; ")
 
     def get_all_films(self):
         """
         Afișează toate filmele existente în sistem.
         """
-        print(self.__film_service.get_films())
+        print(self.__film_service.get_films(), sep="; ")
 
     def add_loan(self):
         """
@@ -453,3 +455,25 @@ class UI:
             return
 
         print(client)
+
+    def top_x_merged(self):
+        try:
+            x = int(input("Ofera valoarea topului pe care il cauti: "))
+        except ValueError:
+            print("Top invalid")
+            return
+        try:
+            top = self.__loan_service.top_x_combined(x)
+            for i in top:
+                print(f"Nume: {i} - ")
+                for j in top[i]:
+                    print(f"    {j}")
+        except UiError as e:
+            print(e)
+            return
+        except ServiceError as e:
+            print(e)
+            return
+        except RepoError as e:
+            print(e)
+            return

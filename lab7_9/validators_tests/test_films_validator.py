@@ -1,61 +1,40 @@
+import unittest
+
 from lab7_9.errors.ServiceError import ServiceError
 from lab7_9.model.Film import Film
 from lab7_9.validators.film_validator import Film_validator
 
 
-def test_verify_film():
-    film_validator = Film_validator()
-    film = Film(1, "Title", "Description", "Gen")
-    assert film_validator.verify_film(film) is None
+class TestFilmValidator(unittest.TestCase):
 
-    try:
-        film_validator.verify_film(Film(1, "", "Desc", "Gen"))
-        assert False
-    except ServiceError:
-        assert True
+    def setUp(self):
+        self.validator = Film_validator()
 
-    try:
-        film_validator.verify_film(Film(1, "Title", "", "Gen"))
-        assert False
-    except ServiceError:
-        assert True
+    def test_verify_film(self):
+        film = Film(1, "Title", "Description", "Gen")
+        self.assertIsNone(self.validator.verify_film(film))
 
-    try:
-        film_validator.verify_film(Film(1, "Title", "Desc", ""))
-        assert False
-    except ServiceError:
-        assert True
+        with self.assertRaises(ServiceError):
+            self.validator.verify_film(Film(1, "", "Desc", "Gen"))
 
-    try:
-        film_validator.verify_film(Film(-5, "Title", "Desc", "Gen"))
-        assert False
-    except ServiceError:
-        assert True
+        with self.assertRaises(ServiceError):
+            self.validator.verify_film(Film(1, "Title", "", "Gen"))
 
-    try:
-        film_validator.verify_film(None)
-        assert False
-    except ServiceError:
-        assert True
+        with self.assertRaises(ServiceError):
+            self.validator.verify_film(Film(1, "Title", "Desc", ""))
 
+        with self.assertRaises(ServiceError):
+            self.validator.verify_film(Film(-5, "Title", "Desc", "Gen"))
 
-def test_id_verificator():
-    film_validator = Film_validator()
-    assert film_validator.id_verificator(1) is None
+        with self.assertRaises(ServiceError):
+            self.validator.verify_film(None)
 
-    try:
-        film_validator.id_verificator(0)
-        assert False
-    except ServiceError:
-        assert True
+    def test_id_verificator(self):
+        self.assertIsNone(self.validator.id_verificator(1))
 
-    try:
-        film_validator.id_verificator(-10)
-        assert False
-    except ServiceError:
-        assert True
+        with self.assertRaises(ServiceError):
+            self.validator.id_verificator(0)
 
+        with self.assertRaises(ServiceError):
+            self.validator.id_verificator(-10)
 
-def tests_film_validator():
-    test_verify_film()
-    test_id_verificator()

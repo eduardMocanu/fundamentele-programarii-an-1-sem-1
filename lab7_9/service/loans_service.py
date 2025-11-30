@@ -1,4 +1,4 @@
-from lab7_9.repository.loans_repo import Loans_repo
+from lab7_9.repository.in_memory.loans_repo import Loans_repo
 from lab7_9.service.clients_service import Clients_service
 from lab7_9.service.films_service import Films_service
 
@@ -65,7 +65,7 @@ class Lending_service:
             number_of_loans = len(value)
             result.append([nume, number_of_loans])
 
-        result.sort(key=lambda pair: pair[0])  # sortare alfabetică
+        result.sort(key=lambda pair: pair[0])
         return result
 
     def most_loaned_films(self):
@@ -120,3 +120,50 @@ class Lending_service:
         all_clients_number_of_loaned_films.sort(key=lambda pair: pair[1], reverse=True)
 
         return all_clients_number_of_loaned_films[:number_of_clients_in_top]
+
+    def __top_x_clients(self, x):
+        loans = self.__loan_repo.get_loans()
+        clients_list = []
+        for i in loans:
+            clients_list.append([i, len(loans[i])])
+        clients_list.sort(key = lambda item: item[1], reverse = True)
+        lista_doar_id = [i[0] for i in clients_list]
+        if x > len(clients_list):
+            return lista_doar_id
+        return lista_doar_id[:x]
+
+    def __top_x_films(self, x):
+        loans = self.__loan_repo.get_loans()
+        films_dict = {}
+        for i in loans:
+            for item in loans[i]:
+                if item not in films_dict:
+                    films_dict[item] = 0
+                films_dict[item] += 1
+        films_list = []
+        for i in films_dict:
+            films_list.append([i, films_dict[i]])
+        films_list.sort(key = lambda item: item[1], reverse=True)
+        lista_doar_id = [i[0] for i in films_list]
+        if x > len(films_list):
+            return films_list
+        return lista_doar_id[:x]
+
+    def top_x_combined(self, x):
+        top_clients = self.__top_x_clients(x)
+        top_films = self.__top_x_films(x)
+        loans = self.__loan_repo.get_loans()
+        top_merged = {}
+        for i in loans:
+            if i in top_clients:
+                top_merged[i] = []
+                for j in loans[i]:
+                    if j in top_films:
+                        top_merged[i].append(j)
+        top_nume = {}
+        for i in top_merged:
+            nume_client = self.__clients_service.search_client_by_id(i).get_nume()
+            top_nume[nume_client] = []
+            for j in top_merged[i]:
+                top_nume[nume_client].append(self.__films_service.search_film_by_id(j))
+        return top_nume

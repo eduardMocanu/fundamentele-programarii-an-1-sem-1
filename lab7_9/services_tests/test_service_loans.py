@@ -1,147 +1,98 @@
-from lab7_9.repository.loans_repo import Loans_repo
+import unittest
+
+from lab7_9.repository.in_memory.loans_repo import Loans_repo
 from lab7_9.service.loans_service import Lending_service
 from lab7_9.service.clients_service import Clients_service
 from lab7_9.service.films_service import Films_service
-from lab7_9.repository.clients_repo import ClientsRepo
-from lab7_9.repository.films_repo import Films_repo
+from lab7_9.repository.in_memory.clients_repo import ClientsRepo
+from lab7_9.repository.in_memory.films_repo import Films_repo
 from lab7_9.validators.client_validator import Client_validator
 from lab7_9.validators.film_validator import Film_validator
 from lab7_9.errors.ServiceError import ServiceError
 from lab7_9.errors.RepoError import RepoError
 
 
-def test_add_loan():
-    loans_repo = Loans_repo()
-    clients_service = Clients_service(ClientsRepo(), Client_validator())
-    films_service = Films_service(Films_repo(), Film_validator())
-    lending_service = Lending_service(loans_repo, clients_service, films_service)
+class TestLendingService(unittest.TestCase):
 
-    clients_service.add_client(1, "Edy", "1234567890123")
-    films_service.add_film(10, "Film X", "Descriere", "test")
+    def setUp(self):
+        self.loans_repo = Loans_repo()
+        self.clients_service = Clients_service(ClientsRepo(), Client_validator())
+        self.films_service = Films_service(Films_repo(), Film_validator())
+        self.service = Lending_service(
+            self.loans_repo, self.clients_service, self.films_service
+        )
 
-    # adăugăm împrumutul
-    lending_service.add_loan(1, 10)
-    assert loans_repo.get_loans() == {1: [10]}
+    def test_add_loan(self):
+        self.clients_service.add_client(1, "Edy", "1234567890123")
+        self.films_service.add_film(10, "Film X", "Descriere", "test")
 
-    # încercăm să adăugăm același împrumut → RepoError
-    try:
-        lending_service.add_loan(1, 10)
-        assert False, "RepoError should have been raised"
-    except RepoError:
-        assert True
+        self.service.add_loan(1, 10)
+        self.assertEqual(self.loans_repo.get_loans(), {1: [10]})
 
-    # client inexistent → ServiceError
-    try:
-        lending_service.add_loan(999, 10)
-        assert False, "ServiceError should have been raised"
-    except ServiceError:
-        assert True
+        with self.assertRaises(RepoError):
+            self.service.add_loan(1, 10)
 
-    # film inexistent → ServiceError
-    try:
-        lending_service.add_loan(1, 999)
-        assert False, "ServiceError should have been raised"
-    except ServiceError:
-        assert True
+        with self.assertRaises(ServiceError):
+            self.service.add_loan(999, 10)
 
+        with self.assertRaises(ServiceError):
+            self.service.add_loan(1, 999)
 
-def test_remove_loan():
-    loans_repo = Loans_repo()
-    clients_service = Clients_service(ClientsRepo(), Client_validator())
-    films_service = Films_service(Films_repo(), Film_validator())
-    lending_service = Lending_service(loans_repo, clients_service, films_service)
+    def test_remove_loan(self):
+        self.clients_service.add_client(1, "Edy", "1234567890123")
+        self.films_service.add_film(10, "Film X", "Descriere", "test")
 
-    clients_service.add_client(1, "Edy", "1234567890123")
-    films_service.add_film(10, "Film X", "Descriere", "test")
+        self.service.add_loan(1, 10)
+        self.service.remove_loan(1, 10)
+        self.assertEqual(self.loans_repo.get_loans(), {1: []})
 
-    lending_service.add_loan(1, 10)
-    lending_service.remove_loan(1, 10)
-    assert loans_repo.get_loans() == {1: []}
+        with self.assertRaises(RepoError):
+            self.service.remove_loan(1, 10)
 
-    # încercăm să ștergem un împrumut inexistent → RepoError
-    try:
-        lending_service.remove_loan(1, 10)
-        assert False, "RepoError should have been raised"
-    except RepoError:
-        assert True
+        with self.assertRaises(ServiceError):
+            self.service.remove_loan(999, 10)
 
-    # client inexistent → ServiceError
-    try:
-        lending_service.remove_loan(999, 10)
-        assert False, "ServiceError should have been raised"
-    except ServiceError:
-        assert True
+        with self.assertRaises(ServiceError):
+            self.service.remove_loan(1, 999)
 
-    # film inexistent → ServiceError
-    try:
-        lending_service.remove_loan(1, 999)
-        assert False, "ServiceError should have been raised"
-    except ServiceError:
-        assert True
+    def test_clients_loaned_films_sorted(self):
+        self.clients_service.add_client(1, "Alex", "1234567890123")
+        self.clients_service.add_client(2, "Edy", "1234567890129")
+        self.films_service.add_film(10, "A", "desc", "test")
+        self.films_service.add_film(20, "B", "desc", "test")
 
+        self.service.add_loan(1, 10)
+        self.service.add_loan(2, 10)
+        self.service.add_loan(2, 20)
 
-def test_clients_loaned_films_sorted():
-    loans_repo = Loans_repo()
-    clients_service = Clients_service(ClientsRepo(), Client_validator())
-    films_service = Films_service(Films_repo(), Film_validator())
-    lending_service = Lending_service(loans_repo, clients_service, films_service)
+        result = self.service.clients_loaned_films_sorted()
+        self.assertEqual(result, [["Alex", 1], ["Edy", 2]])
 
-    clients_service.add_client(1, "Alex", "1234567890123")
-    clients_service.add_client(2, "Edy", "1234567890129")
-    films_service.add_film(10, "A", "desc", "test")
-    films_service.add_film(20, "B", "desc", "test")
+    def test_most_loaned_films(self):
+        self.clients_service.add_client(1, "Edy", "1234567890123")
+        self.clients_service.add_client(2, "Alex", "1234567890129")
+        self.films_service.add_film(10, "Film X", "desc", "test")
+        self.films_service.add_film(20, "Film Y", "desc", "test")
 
-    lending_service.add_loan(1, 10)
-    lending_service.add_loan(2, 10)
-    lending_service.add_loan(2, 20)
+        self.service.add_loan(1, 10)
+        self.service.add_loan(2, 10)
+        self.service.add_loan(1, 20)
 
-    result = lending_service.clients_loaned_films_sorted()
-    assert result == [["Alex", 1], ["Edy", 2]]
+        result = self.service.most_loaned_films()
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].get_titlu(), "Film X")
 
+    def test_top_30_clients(self):
+        self.clients_service.add_client(1, "Edy", "1111111111111")
+        self.clients_service.add_client(2, "Alex", "2222222222222")
+        self.clients_service.add_client(3, "Mihai", "3333333333333")
+        self.films_service.add_film(10, "A", "desc", "test")
+        self.films_service.add_film(20, "B", "desc", "test")
 
-def test_most_loaned_films():
-    loans_repo = Loans_repo()
-    clients_service = Clients_service(ClientsRepo(), Client_validator())
-    films_service = Films_service(Films_repo(), Film_validator())
-    lending_service = Lending_service(loans_repo, clients_service, films_service)
+        self.service.add_loan(1, 10)
+        self.service.add_loan(1, 20)
+        self.service.add_loan(2, 10)
 
-    clients_service.add_client(1, "Edy", "1234567890123")
-    clients_service.add_client(2, "Alex", "1234567890129")
-    films_service.add_film(10, "Film X", "desc", "test")
-    films_service.add_film(20, "Film Y", "desc", "test")
+        result = self.service.top_30_clients()
+        self.assertEqual(result, [["Edy", 2]])
 
-    lending_service.add_loan(1, 10)
-    lending_service.add_loan(2, 10)
-    lending_service.add_loan(1, 20)
-
-    result = lending_service.most_loaned_films()
-    assert len(result) == 1
-    assert result[0].get_titlu() == "Film X"
-
-
-def test_top_30_clients():
-    loans_repo = Loans_repo()
-    clients_service = Clients_service(ClientsRepo(), Client_validator())
-    films_service = Films_service(Films_repo(), Film_validator())
-    lending_service = Lending_service(loans_repo, clients_service, films_service)
-
-    clients_service.add_client(1, "Edy", "1111111111111")
-    clients_service.add_client(2, "Alex", "2222222222222")
-    clients_service.add_client(3, "Mihai", "3333333333333")
-    films_service.add_film(10, "A", "desc", "test")
-    films_service.add_film(20, "B", "desc", "test")
-
-    lending_service.add_loan(1, 10)
-    lending_service.add_loan(1, 20)
-    lending_service.add_loan(2, 10)
-
-    result = lending_service.top_30_clients()
-    assert result == [["Edy", 2]]
-
-
-def tests_lending_service():
-    test_add_loan()
-    test_remove_loan()
-    test_clients_loaned_films_sorted()
-    test_most_loaned_films()
-    test_top_30_clients()

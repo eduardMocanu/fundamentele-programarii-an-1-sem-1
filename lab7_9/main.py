@@ -1,15 +1,13 @@
 from UI import UI
-from repository.clients_repo import ClientsRepo
-from repository.films_repo import Films_repo
-from repository.loans_repo import Loans_repo
+from lab7_9.repository.in_file.clients_repo import ClientsRepo
+from lab7_9.repository.in_file.films_repo import Films_repo
+from lab7_9.repository.in_file.loans_repo import Loans_repo
 from validators.client_validator import Client_validator
 from validators.film_validator import Film_validator
 from service.clients_service import Clients_service
 from service.loans_service import Lending_service
 from service.films_service import Films_service
-from lab7_9.test import test
 
-test()
 
 clients_validators = Client_validator()
 films_validators = Film_validator()

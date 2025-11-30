@@ -1,44 +1,31 @@
+import unittest
 
-from ..errors.ServiceError import ServiceError
-from ..model.Client import Client
-from ..validators.client_validator import Client_validator
-
-
-def test_verify_client():
-    client_validator = Client_validator()
-    client = Client(1, "Test", "1111111111111")
-    assert client_validator.verify_client(client) is None
-
-    try:
-        client_validator.verify_client(Client(1, "", "1234412411111"))
-        assert False
-    except ServiceError:
-        assert True
-
-    try:
-        client_validator.verify_client(Client(1, "Edy", "1234"))
-        assert False
-    except ServiceError:
-        assert True
-
-    try:
-        client_validator.verify_client(Client(-11, "Edy", "1234412411111"))
-        assert False
-    except ServiceError:
-        assert True
-
-def test_id_verification():
-    client_validator = Client_validator()
-    assert client_validator.id_verification(1) is None
-
-    try:
-        client_validator.id_verification(-1)
-        assert False
-    except ServiceError:
-        assert True
+from lab7_9.errors.ServiceError import ServiceError
+from lab7_9.model.Client import Client
+from lab7_9.validators.client_validator import Client_validator
 
 
+class TestClientValidator(unittest.TestCase):
 
-def tests_client_validator():
-    test_verify_client()
-    test_id_verification()
+    def setUp(self):
+        self.validator = Client_validator()
+
+    def test_verify_client(self):
+        client = Client(1, "Test", "1111111111111")
+        self.assertIsNone(self.validator.verify_client(client))
+
+        with self.assertRaises(ServiceError):
+            self.validator.verify_client(Client(1, "", "1234412411111"))
+
+        with self.assertRaises(ServiceError):
+            self.validator.verify_client(Client(1, "Edy", "1234"))
+
+        with self.assertRaises(ServiceError):
+            self.validator.verify_client(Client(-11, "Edy", "1234412411111"))
+
+    def test_id_verification(self):
+        self.assertIsNone(self.validator.id_verification(1))
+
+        with self.assertRaises(ServiceError):
+            self.validator.id_verification(-1)
+
