@@ -14,12 +14,15 @@ class ClientsRepo:
     - caută un client după ID
     """
 
-    def __init__(self):
+    def __init__(self, db_clients = "/Users/eduardmocanu/School/fundamentele programarii sem 1 an 1/lab7_9/db/clients.txt"):
         """
         Inițializează un repo gol de clienți.
         """
         self.__clients = []
-        self.__db_clients = "/Users/eduardmocanu/School/fundamentele programarii sem 1 an 1/lab7_9/db/clients.txt"
+        self.__db_clients = db_clients
+
+    def get_clients(self):
+        return list(self.__clients)
 
     def get_all_clients(self):
         """
@@ -74,19 +77,28 @@ class ClientsRepo:
                 break
         self.write_all_clients()
 
-    def find_by_id(self, client_id: int):
+    def find_by_id(self, client_id: int, index=0):
         """
         Caută un client după ID.
 
         Returnează:
         - obiect Client dacă este găsit
         - None dacă nu există
+
+        Complexitate: O(n) - exista best case si worst case
+        Best case: 1 pas
+        Worst case: n pasi
+
+        Recursiv
         """
-        self.read_all_clients()
-        for client in self.__clients:
-            if client.get_id() == client_id:
-                return client
-        return None
+        if index == 0:
+            self.read_all_clients()
+        if index == len(self.get_clients()):
+            return None
+        client = self.get_clients()[index]
+        if client_id == client.get_id():
+            return client
+        return self.find_by_id(client_id, index + 1)
 
     def set_clients(self, clients):
         self.__clients = clients

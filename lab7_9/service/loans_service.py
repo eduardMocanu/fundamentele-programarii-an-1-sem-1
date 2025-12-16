@@ -1,6 +1,7 @@
 from lab7_9.repository.in_memory.loans_repo import Loans_repo
 from lab7_9.service.clients_service import Clients_service
 from lab7_9.service.films_service import Films_service
+from lab7_9.sorts.Sorts import Sorts
 
 
 class Lending_service:
@@ -65,7 +66,7 @@ class Lending_service:
             number_of_loans = len(value)
             result.append([nume, number_of_loans])
 
-        result.sort(key=lambda pair: pair[0])
+        Sorts.quick_sort(result, key=lambda pair: pair[0])
         return result
 
     def most_loaned_films(self):
@@ -117,7 +118,7 @@ class Lending_service:
             number_of_loans = len(films)
             all_clients_number_of_loaned_films.append([nume, number_of_loans])
 
-        all_clients_number_of_loaned_films.sort(key=lambda pair: pair[1], reverse=True)
+        Sorts.quick_sort(all_clients_number_of_loaned_films, key=lambda pair: pair[1], rev=True)
 
         return all_clients_number_of_loaned_films[:number_of_clients_in_top]
 
@@ -126,7 +127,7 @@ class Lending_service:
         clients_list = []
         for i in loans:
             clients_list.append([i, len(loans[i])])
-        clients_list.sort(key = lambda item: item[1], reverse = True)
+        Sorts.gnome_sort(clients_list, key = lambda item: item[1], rev= True)
         lista_doar_id = [i[0] for i in clients_list]
         if x > len(clients_list):
             return lista_doar_id

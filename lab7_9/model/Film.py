@@ -32,3 +32,8 @@ class Film:
 
     def __repr__(self):
         return f"Titlu: {self.__titlu}, Descriere: {self.__descriere}, Gen: {self.__gen}"
+
+    def __eq__(self, other):
+        if self.get_id() == other.get_id() and self.get_gen() == other.get_gen():
+            return True
+        return False

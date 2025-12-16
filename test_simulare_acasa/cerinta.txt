@@ -1,0 +1,13 @@
+Student - id, nume
+Course - id, nume, [listaIdStudenti]
+
+addStudent
+removeStudent
+modifyStudent
+getAllStudents
+
+
+addCourse
+removeCourse
+modifyCourse
+getAllCourses

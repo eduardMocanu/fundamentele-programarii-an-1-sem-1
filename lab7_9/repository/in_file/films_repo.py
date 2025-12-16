@@ -4,9 +4,12 @@ from lab7_9.model.Film import Film
 
 class Films_repo:
 
-    def __init__(self):
+    def __init__(self, file_db = "/Users/eduardmocanu/School/fundamentele programarii sem 1 an 1/lab7_9/db/films.txt"):
         self.__films = []
-        self.__db_films = "/Users/eduardmocanu/School/fundamentele programarii sem 1 an 1/lab7_9/db/films.txt"
+        self.__db_films = file_db
+
+    def get_films(self):
+        return list(self.__films)
 
     def get_all_films(self):
         """
@@ -54,17 +57,22 @@ class Films_repo:
                 break
         self.write_all_films()
 
-    def find_film_by_id(self, film_id):
+    def find_film_by_id(self, film_id, index = 0):
         """
         Caută și returnează filmul cu ID-ul specificat.
 
         Returnează None dacă nu există un astfel de film.
+
+        Recursiv
         """
-        self.read_all_films()
-        for i in self.__films:
-            if i.get_id() == film_id:
-                return i
-        return None
+        if index == 0:
+            self.read_all_films()
+        if index == len(self.get_films()):
+            return None
+        film = self.get_films()[index]
+        if film_id == film.get_id():
+            return film
+        return self.find_film_by_id(film_id, index + 1)
 
     def set_films(self, films):
         self.__films = films

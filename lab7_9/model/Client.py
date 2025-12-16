@@ -1,3 +1,6 @@
+from operator import truediv
+
+
 class Client:
 
     def __init__(self, id, nume, CNP):
@@ -25,3 +28,8 @@ class Client:
 
     def __repr__(self):
         return f"Nume: {self.__nume}, Id: {self.__id}, CNP: {self.__CNP}"
+
+    def __eq__(self, other):
+        if other.get_nume() == self.get_nume() and other.get_id() == self.get_id() and self.get_CNP() == other.get_CNP():
+            return True
+        return False
